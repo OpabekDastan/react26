@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS Refresher — Lab Notebook</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<div class="shell">
+  <nav class="toc">
+    <div class="brand">JS REFRESHER</div>
+    <ol id="toc-list"></ol>
+  </nav>
+
+  <main>
+    <header class="cover">
+      <div class="eyebrow">Task 0 — pre-React practice</div>
+      <h1>JavaScript Refresher — Lab Notebook</h1>
+      <p>Working through the warm-up tasks before React: variables, arrays, objects,
+      references, functions, scope, closures, destructuring and optional chaining.
+      Every task runs live below, and the code panel keeps my own comments and
+      notes exactly where I wrote them while solving it.</p>
+      <div class="meta">Opabek Dastan · KBTU, Information Systems</div>
+    </header>
+
+    <section class="task" id="task-1">
+      <div class="tab">01</div>
+      <h2>Variables and Data Types</h2>
+      <p class="prompt">Student variables (name, age, active status, courses, address), typeof checks,
+      null vs undefined, primitive vs reference, a template literal sentence.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-1"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-1"></div>
+      <div class="insight" id="insight-1"></div>
+    </section>
+
+    <section class="task" id="task-2">
+      <div class="tab">02</div>
+      <h2>Arrays</h2>
+      <p class="prompt">map / filter / find / reduce / includes on [3, 7, 2, 10, 5], without mutating the original.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-2"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-2"></div>
+      <div class="insight" id="insight-2"></div>
+    </section>
+
+    <section class="task" id="task-3">
+      <div class="tab">03</div>
+      <h2>Arrays of Objects</h2>
+      <p class="prompt">Four students with grades — filter passers, list names, find by id, top grade,
+      average, and a derived passed/failed array.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-3"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-3"></div>
+      <div class="insight" id="insight-3"></div>
+    </section>
+
+    <section class="task" id="task-4">
+      <div class="tab">04</div>
+      <h2>Objects</h2>
+      <p class="prompt">Read, update, add and delete fields on a user object, plus plain, nested
+      and renaming destructuring.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-4"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-4"></div>
+      <div class="insight" id="insight-4"></div>
+    </section>
+
+    <section class="task" id="task-5">
+      <div class="tab">05</div>
+      <h2>Values and References</h2>
+      <p class="prompt">Why copy.score = ... changes original, fixing it with spread, and why a
+      shallow spread still shares nested objects.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-5"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-5"></div>
+      <div class="insight" id="insight-5"></div>
+    </section>
+
+    <section class="task" id="task-6">
+      <div class="tab">06</div>
+      <h2>Functions</h2>
+      <p class="prompt">isEven, getFullName, calculatePrice, calculateDiscount, getMax — one written
+      both as a function declaration and as an arrow function.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-6"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-6"></div>
+      <div class="insight" id="insight-6"></div>
+    </section>
+
+    <section class="task" id="task-7">
+      <div class="tab">07</div>
+      <h2>Functions as Values</h2>
+      <p class="prompt">add, multiply, and a calculate(a, b, operation) that takes a function as an argument.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-7"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-7"></div>
+      <div class="insight" id="insight-7"></div>
+    </section>
+
+    <section class="task" id="task-8">
+      <div class="tab">08</div>
+      <h2>Scope</h2>
+      <p class="prompt">Same variable name shadowed at global, function and block level, plus
+      var vs let vs const leaking (or not) out of a block.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-8"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-8"></div>
+      <div class="insight" id="insight-8"></div>
+    </section>
+
+    <section class="task" id="task-9">
+      <div class="tab">09</div>
+      <h2>Closures</h2>
+      <p class="prompt">createCounter() keeping its own private count, two independent counters,
+      and createAdder(value).</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-9"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-9"></div>
+      <div class="insight" id="insight-9"></div>
+    </section>
+
+    <section class="task" id="task-10">
+      <div class="tab">10</div>
+      <h2>Destructuring, Spread and Rest</h2>
+      <p class="prompt">Array/object destructuring, non-mutating updates with spread, combining
+      arrays, and a rest-parameter sum(...numbers).</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-10"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-10"></div>
+      <div class="insight" id="insight-10"></div>
+    </section>
+
+    <section class="task" id="task-11">
+      <div class="tab">11</div>
+      <h2>Optional Chaining and Default Values</h2>
+      <p class="prompt">A real TypeError from a missing nested field, fixing it with ?., a ?? fallback,
+      and || vs ?? on 0, "", false, null, undefined.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-11"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-11"></div>
+      <div class="insight" id="insight-11"></div>
+    </section>
+
+    <section class="task" id="task-final">
+      <div class="tab">FT</div>
+      <h2>Final Task</h2>
+      <p class="prompt">Five students with grade arrays, a small set of helper functions, and a
+      derived { id, name, average, passed } array, all without touching the original data.</p>
+      <div class="panel-label">code</div>
+      <pre class="code-block"><code class="language-javascript" id="code-final"></code></pre>
+      <div class="panel-label">output</div>
+      <div class="output-panel" id="output-final"></div>
+      <div class="insight" id="insight-final"></div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  Sources used while solving this: MDN JavaScript Guide, javascript.info — Fundamentals and Objects.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+<script src="script.js" defer></script>
+</body>
+</html>
