@@ -61,15 +61,15 @@ function task1(outId) {
   const sentence = `${studentName} is ${studentAge} years old and studies ${courses.length} courses.`;
   log(outId, 'template literal ->', sentence);
 
-  /* primitive vs reference:
-     primitive  -> studentName, studentAge, isActive, middleName, graduationYear
-     reference  -> courses (array), address (object) */
+  // primitive vs reference:
+  //   primitive  -> studentName, studentAge, isActive, middleName, graduationYear
+  //   reference  -> courses (array), address (object) */
 
-  /* INSIGHT:
-   let vs const - const just means you can't reassign the variable itself.
-   if it holds an object/array you can still change what's inside, the box stays the same.
-   typeof null gives "object" which is honestly just an old bug, null isn't really an object.
-  primitives: string, number, boolean, undefined, null, symbol, bigint. everything else is a reference.*/
+  // INSIGHT:
+  // let vs const - const just means you can't reassign the variable itself.
+  // if it holds an object/array you can still change what's inside, the box stays the same.
+  // typeof null gives "object" which is honestly just an old bug, null isn't really an object.
+  //primitives: string, number, boolean, undefined, null, symbol, bigint. everything else is a reference.*/
 }
 
 /* ============================================================
@@ -92,10 +92,10 @@ function task2(outId) {
   log(outId, 'includes 10 ->', has10);
   log(outId, 'original still untouched ->', numbers);
 
-  /* INSIGHT:
-   map and filter always give back a new array. reduce can return anything, here it's just a number.
-   find gives you the actual item, not the index (findIndex is the one for that).
-   checked and none of these touch the original numbers array, good to see it for real */
+  // INSIGHT:
+  // map and filter always give back a new array. reduce can return anything, here it's just a number.
+  // find gives you the actual item, not the index (findIndex is the one for that).
+  // checked and none of these touch the original numbers array, good to see it for real */
 }
 
 /* ============================================================
@@ -125,11 +125,11 @@ function task3(outId) {
   log(outId, 'with passed flag ->', withPassedFlag);
   log(outId, 'original students unchanged ->', students);
 
-  /* INSIGHT:
-   {...s, passed: ...} makes a fresh copy of each student, so the original array stays untouched.
-   that's basically the whole point of this task.
-   reduce without an initial value just uses students[0] as the starting "best", works here
-  but probably not safe if the array could ever be empty. */
+  // INSIGHT:
+  // {...s, passed: ...} makes a fresh copy of each student, so the original array stays untouched.
+  // that's basically the whole point of this task.
+  // reduce without an initial value just uses students[0] as the starting "best", works here
+  //but probably not safe if the array could ever be empty. */
 }
 
 /* ============================================================
@@ -161,11 +161,11 @@ function task4(outId) {
   log(outId, 'destructured nested city ->', city);
   log(outId, 'renamed userName ->', userName);
 
-  /* INSIGHT:
-   at first I wrote delete user.street and couldn't figure out why street was still there.
-   turns out street was inside user.address the whole time, not on user directly.
-   the { name: userName } rename syntax is a bit confusing at first:
-   left side is always the existing key on the object, right side is the new variable name.*/
+  // INSIGHT:
+  // at first I wrote delete user.street and couldn't figure out why street was still there.
+  // turns out street was inside user.address the whole time, not on user directly.
+  // the { name: userName } rename syntax is a bit confusing at first:
+  // left side is always the existing key on the object, right side is the new variable name.*/
 }
 
 /* ============================================================
@@ -191,11 +191,11 @@ function task5(outId) {
   userDeep.address.city = "Shymkent";
   log(outId, 'deep-ish copy, changed nested city ... original city ->', user.address.city); // untouched
 
-  /* INSIGHT:
-   copy = original doesn't actually copy anything, it's just a second name pointing at the same object.
-   that's why copy.score = 20 also changes original.score.
-   {...original} only copies one level deep, so the nested address object was still shared,
-   had to spread that separately too. for a real deep copy I'd just use structuredClone(obj). */
+  // INSIGHT:
+  // copy = original doesn't actually copy anything, it's just a second name pointing at the same object.
+  // that's why copy.score = 20 also changes original.score.
+  //{...original} only copies one level deep, so the nested address object was still shared,
+  // had to spread that separately too. for a real deep copy I'd just use structuredClone(obj). */
 }
 
 /* ============================================================
@@ -221,11 +221,11 @@ function task6(outId) {
   log(outId, 'calculateDiscount(2500, 10) ->', calculateDiscount(2500, 10));
   log(outId, 'getMax(7, 12) ->', getMax(7, 12));
 
-  /* INSIGHT:
-   isEven and isEvenArrow do the exact same thing, just different syntax.
-   arrow function is shorter but has no own "this" and can't be used as a constructor.
-   doesn't matter for simple stuff like this, but I'll think twice before using
-   an arrow function as an object method. */
+  // INSIGHT:
+  // isEven and isEvenArrow do the exact same thing, just different syntax.
+  // arrow function is shorter but has no own "this" and can't be used as a constructor.
+  // doesn't matter for simple stuff like this, but I'll think twice before using
+  // an arrow function as an object method. */
 }
 
 /* ============================================================
@@ -242,11 +242,11 @@ function task7(outId) {
   log(outId, 'calculate(5, 3, add) ->', calculate(5, 3, add));
   log(outId, 'calculate(5, 3, multiply) ->', calculate(5, 3, multiply));
 
-  /* INSIGHT:
-   yes, functions can be stored in variables (add and multiply are just values here)
-   and passed into other functions as arguments, that's basically what "higher order function" means.
-   add by itself is the function, you can pass it around without calling it.
-   add() actually calls it and gives you a number back, not a function.*/
+  // INSIGHT:
+  // yes, functions can be stored in variables (add and multiply are just values here)
+  // and passed into other functions as arguments, that's basically what "higher order function" means.
+  // add by itself is the function, you can pass it around without calling it.
+  // add() actually calls it and gives you a number back, not a function.*/
 }
 
 /* ============================================================
@@ -282,11 +282,11 @@ function task8(outId) {
     logError(outId, e);
   }
 
-  /* INSIGHT:
-   the confusing part is having "message" declared three times at three levels.
-   js looks for the variable from the inside out and just stops at the first match it finds.
-   var ignores the curly braces of a block and stays alive till the end of the function,
-   but let/const are actually locked inside {}, which is why the eval throws a ReferenceError. */
+  // INSIGHT:
+  // the confusing part is having "message" declared three times at three levels.
+  // js looks for the variable from the inside out and just stops at the first match it finds.
+  // var ignores the curly braces of a block and stays alive till the end of the function,
+  // but let/const are actually locked inside {}, which is why the eval throws a ReferenceError. */
 }
 
 /* ============================================================
@@ -319,12 +319,12 @@ function task9(outId) {
   log(outId, 'addFive(10) ->', addFive(10));
   log(outId, 'addFive(20) ->', addFive(20));
 
-  /* INSIGHT:
-   every call to createCounter() makes its own separate count variable.
-   counterA and counterB don't interfere with each other, you can see it because
-   counterB starts back at 1 even though counterA is already at 3.
-   the inner function isn't "remembering a value", it just keeps a live link to the
-   scope it was created in. that's what a closure actually is. */
+  // INSIGHT:
+  // every call to createCounter() makes its own separate count variable.
+  // counterA and counterB don't interfere with each other, you can see it because
+  // counterB starts back at 1 even though counterA is already at 3.
+  // the inner function isn't "remembering a value", it just keeps a live link to the
+  // scope it was created in. that's what a closure actually is. */
 }
 
 /* ============================================================
@@ -389,12 +389,12 @@ function task11(outId) {
     log(outId, `value = ${formatValue(v)}  ->  (v ?? "default")`, v ?? "default");
   });
 
-  /* INSIGHT:
-   ?. just stops and returns undefined the moment something on the left is null/undefined,
-   instead of throwing. really useful for API data where a field might just not be there.
-   || vs ??: || replaces ANY falsy value (0, "", false, null, undefined), but ?? only
-   cares about null and undefined. so || quietly breaks valid 0 or "" values, which is
-   exactly why ?? got added to the language. */
+  // INSIGHT:
+  // ?. just stops and returns undefined the moment something on the left is null/undefined,
+  // instead of throwing. really useful for API data where a field might just not be there.
+  // || vs ??: || replaces ANY falsy value (0, "", false, null, undefined), but ?? only
+  // cares about null and undefined. so || quietly breaks valid 0 or "" values, which is
+  // exactly why ?? got added to the language. */
 }
 
 /* ============================================================
@@ -442,11 +442,11 @@ function taskFinal(outId) {
   log(outId, 'final { id, name, average, passed } array ->', summary);
   log(outId, 'original students array untouched ->', students);
 
-  /* INSIGHT:
-   building small plain functions (getAverage, getStudentAverage) and reusing them in
-   getPassedStudents/getTopStudent felt way nicer than one giant loop, each piece is
-   easy to check on its own. none of them touch the students array directly,
-   map/filter/reduce/find always give back something new so the original data stays intact. */
+  // INSIGHT:
+  // building small plain functions (getAverage, getStudentAverage) and reusing them in
+  // getPassedStudents/getTopStudent felt way nicer than one giant loop, each piece is
+  // easy to check on its own. none of them touch the students array directly,
+  // map/filter/reduce/find always give back something new so the original data stays intact. */
 }
 
 /* ============================================================
