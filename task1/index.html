@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Async Tasks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Async Tasks</h1>
+    <p class="lede">Closures, Promises, and the Event Loop, made visible.</p>
+
+    <section class="panel">
+      <h2>Tasks</h2>
+      <div id="tasks"></div>
+
+      <button id="runAllBtn">Run All Tasks</button>
+      <ul id="allTasksList"></ul>
+      <p id="allTasksResult" class="result"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Sequential vs concurrent</h2>
+      <p class="lede">Same three tasks, run two different ways.</p>
+      <div class="button-row">
+        <button id="runSeqBtn">Run sequential</button>
+        <button id="runConcBtn">Run concurrent</button>
+      </div>
+      <p id="seqResult" class="result"></p>
+      <p id="concResult" class="result"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Event loop demo</h2>
+      <p class="lede">console.log, setTimeout, Promise.then, and async/await, in one run.</p>
+      <button id="eventLoopBtn">Run event loop demo</button>
+      <pre id="eventLoopOutput"></pre>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
