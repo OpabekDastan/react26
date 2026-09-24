@@ -6,7 +6,7 @@ import Contacts from './components/Contacts'
 function App() {
   return (
     <div className="page">
-      <Profile name="Dastan" image="/cover.jpg" />
+      <Profile name="Dastan" image={`${import.meta.env.BASE_URL}cover.jpg`} />
       <AboutMe />
       <Contacts />
     </div>
