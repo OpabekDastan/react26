@@ -5,67 +5,118 @@ import QuestionDetail from "./components/QuestionDetail.jsx";
 import QuestionForm from "./components/QuestionForm.jsx";
 
 export default function App() {
-  const [questions, setQuestions] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [retry, setRetry] = useState(0);
+	const [questions, setQuestions] = useState([]);
+	const [selected, setSelected] = useState(null);
+	const [showForm, setShowForm] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+	const [message, setMessage] = useState("");
+	const [retry, setRetry] = useState(0);
 
-  useEffect(
-    function () {
-      let active = true;
+	useEffect(
+		function () {
+			let active = true;
 
-      async function load() {
-        setLoading(true);
-        setError("");
-        try {
-          const data = await getQuestions();
-          if (active) setQuestions(data);
-        } catch {
-          if (active)
-            setError("Cannot load questions. Check browser storage and try again.");
-        }
-        if (active) setLoading(false);
-      }
+			async function load() {
+				setLoading(true);
+				setError("");
+				try {
+					const data = await getQuestions();
+					if (active) setQuestions(data);
+				} catch {
+					if (active)
+						setError(
+							"Cannot load questions. Check browser storage and try again.",
+						);
+				}
+				if (active) setLoading(false);
+			}
 
-      load();
-      return function () {
-        active = false;
-      };
-    },
-    [retry]
-  );
+			load();
+			return function () {
+				active = false;
+			};
+		},
+		[retry],
+	);
 
-  useEffect(
-    function () {
-      if (message === "") return;
+	useEffect(
+		function () {
+			if (message === "") return;
 
-      const timer = setTimeout(function () {
-        setMessage("");
-      }, 3000);
+			const timer = setTimeout(function () {
+				setMessage("");
+			}, 3000);
 
-      return function () {
-        clearTimeout(timer);
-      };
-    },
-    [message]
-  );
+			return function () {
+				clearTimeout(timer);
+			};
+		},
+		[message],
+	);
 
-  function tryAgain() {
-    setRetry(function (oldRetry) {
-      return oldRetry + 1;
-    });
-  }
+	function tryAgain() {
+		setRetry(function (oldRetry) {
+			return oldRetry + 1;
+		});
+	}
 
-  function openForm() {
-    setSelected(null);
-    setMessage("");
-    setShowForm(true);
-  }
+	function openForm() {
+		setSelected(null);
+		setMessage("");
+		setShowForm(true);
+	}
 
-  function back() {
-    setSelected(null);
-    setShowForm(false);
-  }
+	function back() {
+		setSelected(null);
+		setShowForm(false);
+	}
+
+	function saveQuestion(question) {
+		setQuestions(function (oldQuestions) {
+			return [question, ...oldQuestions];
+		});
+		setShowForm(false);
+		setMessage("Question added successfully.");
+	}
+
+	return (
+		<div className="app">
+			<header>
+				<div>
+					<h1>InterviewHub</h1>
+					<p>Practice questions for your next developer interview.</p>
+				</div>
+				<button
+					onClick={openForm}
+					disabled={loading || error !== "" || showForm}>
+					Add question
+				</button>
+			</header>
+
+			<main>
+				{message !== "" && (
+					<p className="success" role="status">
+						{message}
+					</p>
+				)}
+				{loading && <p role="status">Loading questions...</p>}
+				{error !== "" && (
+					<div className="error" role="alert">
+						<p>{error}</p>
+						<button onClick={tryAgain}>Try again</button>
+					</div>
+				)}
+
+				<section
+					hidden={loading || error !== "" || selected !== null || showForm}>
+					<QuestionList questions={questions} onOpen={setSelected} />
+				</section>
+				{selected !== null && (
+					<QuestionDetail key={selected.id} question={selected} onBack={back} />
+				)}
+				{showForm && <QuestionForm onSave={saveQuestion} onCancel={back} />}
+			</main>
+		</div>
+	);
+}

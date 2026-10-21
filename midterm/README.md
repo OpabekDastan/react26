@@ -1,16 +1,67 @@
-# React + Vite
+# InterviewHub
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+InterviewHub is a React single page application for practicing developer interview questions.
+You can search, filter, sort and page through 100 questions, open a question to see its answer,
+and add your own questions.
 
-Currently, two official plugins are available:
+**Live demo:** 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- List of 100 interview questions (Python, Django, SQL, Git, HTTP, React)
+- Search by question title
+- Filter by topic and level
+- Sort by title (A-Z), newest first, or easy first
+- Pagination (6 questions per page)
+- Detail view with a "Show answer" / "Hide answer" button
+- Controlled form to add a new question (with validation)
+- Loading, error (with "Try again"), empty and success states
+- Responsive layout for desktop, tablet and phone
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Data source
 
-## Expanding the Oxlint configuration
+The app uses a **simulated API** (`src/api.js`):
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- the first 100 records come from `src/questions.json`;
+- the data is saved in `localStorage`, so added questions stay after a page reload;
+- every request waits 300 ms and returns a Promise, like a real server.
+
+To reset the data, delete the `interviewhub.simple.questions` key in
+DevTools → Application → Local Storage.
+
+## Project structure
+
+```
+src/
+  main.jsx               entry point, renders <App />
+  App.jsx                loads data, switches between list / detail / form
+  api.js                 simulated API (getQuestions, addQuestion)
+  options.js             list of topics and levels
+  questions.json         100 initial questions
+  style.css              styles
+  components/
+    QuestionList.jsx     search, filter, sort and pagination state
+    Filters.jsx          search input and select boxes
+    QuestionCard.jsx     one question in the list
+    Pagination.jsx       Previous / Next buttons
+    QuestionDetail.jsx   one question with its answer
+    QuestionForm.jsx     controlled form for a new question
+```
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Tech
+
+React 19, Vite, plain CSS.

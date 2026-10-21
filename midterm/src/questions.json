@@ -1,0 +1,902 @@
+[
+  {
+    "id": "python-01",
+    "title": "What is the difference between a list and a tuple?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "A list can change after you create it. A tuple keeps the same items in the same positions. Both can store several values. A tuple can still contain an object, such as a list, that can change.",
+    "example": "names = [\"Dastan\", \"Dana\"]\nnames.append(\"Ali\")\npoint = (10, 20)",
+    "createdAt": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "django-01",
+    "title": "What is ORM in Django?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "ORM means Object-Relational Mapping. Django models describe database tables as Python classes. The ORM lets us create, read, update, and delete records using Python instead of writing most SQL by hand.",
+    "example": "users = User.objects.filter(is_active=True)",
+    "createdAt": "2026-01-02T00:00:00Z"
+  },
+  {
+    "id": "sql-01",
+    "title": "What is a relational database?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "A relational database organizes data in tables with rows and columns. Keys connect related tables. SQL is a common language for reading and changing this data.",
+    "example": "SELECT name FROM users;",
+    "createdAt": "2026-01-03T00:00:00Z"
+  },
+  {
+    "id": "git-01",
+    "title": "What is Git?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "Git is a distributed version control system. It records changes to files and helps people work on the same project. Each normal clone contains the project history.",
+    "example": "git status\ngit log --oneline",
+    "createdAt": "2026-01-04T00:00:00Z"
+  },
+  {
+    "id": "http-01",
+    "title": "What is HTTP?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "HTTP is an application-level protocol for exchanging requests and responses. A client sends a request and a server returns a response. Web APIs commonly use it to exchange data.",
+    "example": "GET /api/questions HTTP/1.1\nHost: example.com",
+    "createdAt": "2026-01-05T00:00:00Z"
+  },
+  {
+    "id": "react-01",
+    "title": "What is a React component?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "A React component describes part of the user interface. A function component returns JSX. Components can receive props and use state to show changing information.",
+    "example": "function Welcome() {\n  return <h1>Hello, Dastan!</h1>;\n}",
+    "createdAt": "2026-01-06T00:00:00Z"
+  },
+  {
+    "id": "python-02",
+    "title": "What is a dictionary in Python?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "A dictionary stores key and value pairs. Each key is unique. We use a key to find its value. Keys must be hashable, for example strings or integers.",
+    "example": "user = {\"name\": \"Dastan\", \"age\": 22}\nprint(user[\"name\"])",
+    "createdAt": "2026-01-07T00:00:00Z"
+  },
+  {
+    "id": "django-02",
+    "title": "What is a Django model?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "A model is a Python class that describes stored data. Its fields usually become database columns. Each model instance usually represents one database record.",
+    "example": "class Book(models.Model):\n    title = models.CharField(max_length=200)",
+    "createdAt": "2026-01-08T00:00:00Z"
+  },
+  {
+    "id": "sql-02",
+    "title": "What is a primary key?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "A primary key uniquely identifies a row in a table. It cannot contain NULL values. It can be one column or a combination of columns.",
+    "example": "CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name VARCHAR(100) NOT NULL\n);",
+    "createdAt": "2026-01-09T00:00:00Z"
+  },
+  {
+    "id": "git-02",
+    "title": "What is a Git repository?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "A repository stores project files and their version history. Git uses a .git directory to track commits and other information. A repository can have local and remote copies.",
+    "example": "git init",
+    "createdAt": "2026-01-10T00:00:00Z"
+  },
+  {
+    "id": "http-02",
+    "title": "What is the difference between GET and POST?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "GET is used to retrieve a representation and should not request a state change. POST submits data for the server to process, often creating a resource. The exact behavior is defined by the API.",
+    "example": "GET /api/questions\nPOST /api/questions",
+    "createdAt": "2026-01-11T00:00:00Z"
+  },
+  {
+    "id": "react-02",
+    "title": "What is JSX?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "JSX is a syntax extension for JavaScript that describes user interface elements. It looks similar to HTML. Curly braces let us include JavaScript expressions.",
+    "example": "const name = \"Dastan\";\nconst title = <h1>Hello, {name}!</h1>;",
+    "createdAt": "2026-01-12T00:00:00Z"
+  },
+  {
+    "id": "python-03",
+    "title": "What is a function?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "A function is a named block of code that performs a task. It can receive values called arguments and return a result. Functions help us reuse code.",
+    "example": "def greet(name):\n    return \"Hello, \" + name\n\nprint(greet(\"Dastan\"))",
+    "createdAt": "2026-01-13T00:00:00Z"
+  },
+  {
+    "id": "django-03",
+    "title": "What is a Django view?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "A view receives a web request and returns a response. It can read data, check input, and choose what to send back. Views can be functions or classes.",
+    "example": "from django.http import HttpResponse\n\ndef home(request):\n    return HttpResponse(\"Hello\")",
+    "createdAt": "2026-01-14T00:00:00Z"
+  },
+  {
+    "id": "sql-03",
+    "title": "What is a foreign key?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "A foreign key connects values in one table to a key in another table. It helps enforce valid relationships. For example, an order can refer to an existing customer.",
+    "example": "customer_id INTEGER REFERENCES customers(id)",
+    "createdAt": "2026-01-15T00:00:00Z"
+  },
+  {
+    "id": "git-03",
+    "title": "What is a commit?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "A commit records a snapshot of tracked project content, together with information such as a message and parent commits. A clear message explains the purpose of the change.",
+    "example": "git add src/App.jsx\ngit commit -m \"Add question list\"",
+    "createdAt": "2026-01-16T00:00:00Z"
+  },
+  {
+    "id": "http-03",
+    "title": "What does status code 200 mean?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "200 OK means the request succeeded. The response meaning depends on the request method. A successful GET often includes the requested data.",
+    "example": "HTTP/1.1 200 OK\nContent-Type: application/json",
+    "createdAt": "2026-01-17T00:00:00Z"
+  },
+  {
+    "id": "react-03",
+    "title": "What are props?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "Props are values passed from a parent component to a child. The child reads them to decide what to show or how to behave. A component should not change its props.",
+    "example": "function QuestionTitle(props) {\n  return <h2>{props.title}</h2>;\n}",
+    "createdAt": "2026-01-18T00:00:00Z"
+  },
+  {
+    "id": "python-04",
+    "title": "What is the difference between == and is?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "The == operator compares values. The is operator checks whether two names refer to the same object. Use is when checking for None.",
+    "example": "first = [1, 2]\nsecond = [1, 2]\nprint(first == second)  # True\nprint(first is second)  # False",
+    "createdAt": "2026-01-19T00:00:00Z"
+  },
+  {
+    "id": "django-04",
+    "title": "What does a URL configuration do?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "A URL configuration connects URL patterns to views. Django checks the patterns and calls the matching view. A URL can also capture values such as an item ID.",
+    "example": "path(\"books/<int:book_id>/\", book_detail, name=\"book-detail\")",
+    "createdAt": "2026-01-20T00:00:00Z"
+  },
+  {
+    "id": "sql-04",
+    "title": "What does SELECT do?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "SELECT reads data from a database. We can choose specific columns and use conditions to limit the result. Explicit column names make the query clear.",
+    "example": "SELECT id, name FROM users;",
+    "createdAt": "2026-01-21T00:00:00Z"
+  },
+  {
+    "id": "git-04",
+    "title": "What is the staging area?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "The staging area holds the content planned for the next commit. git add puts changes there. You can stage selected changes instead of committing everything at once.",
+    "example": "git add src/App.jsx\ngit diff --staged",
+    "createdAt": "2026-01-22T00:00:00Z"
+  },
+  {
+    "id": "http-04",
+    "title": "What does status code 404 mean?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "404 Not Found means the server did not find the requested resource or does not wish to disclose it. Check the address, route, and resource ID.",
+    "example": "GET /api/questions/missing-id\nHTTP/1.1 404 Not Found",
+    "createdAt": "2026-01-23T00:00:00Z"
+  },
+  {
+    "id": "react-04",
+    "title": "What does useState do?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "useState adds state to a function component. It returns the current value and a setter. Calling the setter queues a state update and can cause React to render again.",
+    "example": "const [answerVisible, setAnswerVisible] = useState(false);\n\nfunction showAnswer() {\n  setAnswerVisible(true);\n}",
+    "createdAt": "2026-01-24T00:00:00Z"
+  },
+  {
+    "id": "python-05",
+    "title": "What does None mean?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "None is a special value that represents the absence of a value. A function without a return statement returns None. It is different from zero and an empty string.",
+    "example": "result = None\nif result is None:\n    print(\"No result yet\")",
+    "createdAt": "2026-01-25T00:00:00Z"
+  },
+  {
+    "id": "django-05",
+    "title": "What is a migration?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "A migration describes a change to the database structure or data. makemigrations creates migration files from model changes. migrate applies pending migrations to the database.",
+    "example": "python manage.py makemigrations\npython manage.py migrate",
+    "createdAt": "2026-01-26T00:00:00Z"
+  },
+  {
+    "id": "sql-05",
+    "title": "What does WHERE do?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "WHERE keeps only rows that match a condition. It is applied before grouping. Use it to find specific data instead of loading every row.",
+    "example": "SELECT name FROM users WHERE active = TRUE;",
+    "createdAt": "2026-01-27T00:00:00Z"
+  },
+  {
+    "id": "git-05",
+    "title": "What is a Git branch?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "A branch is a movable reference to a commit. It lets us work on a feature without immediately changing another branch. New commits move the current branch forward.",
+    "example": "git switch -c add-search",
+    "createdAt": "2026-01-28T00:00:00Z"
+  },
+  {
+    "id": "http-05",
+    "title": "What is JSON?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "JSON is a text format for structured data. It supports objects, arrays, strings, numbers, booleans, and null. JSON object keys and strings use double quotes.",
+    "example": "{\"id\": 1, \"title\": \"What is HTTP?\", \"saved\": false}",
+    "createdAt": "2026-01-29T00:00:00Z"
+  },
+  {
+    "id": "react-05",
+    "title": "What is a controlled input?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "A controlled input gets its value from React state. Its onChange handler updates that state as the user types. The state is the source of truth for the input value.",
+    "example": "function handleChange(event) {\n  setSearchText(event.target.value);\n}\n\n<input value={searchText} onChange={handleChange} />",
+    "createdAt": "2026-01-30T00:00:00Z"
+  },
+  {
+    "id": "python-06",
+    "title": "How do you handle an exception?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "Use try for code that may fail and except to handle a specific error. This lets the program show a useful message instead of stopping unexpectedly.",
+    "example": "try:\n    number = int(\"hello\")\nexcept ValueError:\n    print(\"Please enter a number\")",
+    "createdAt": "2026-01-31T00:00:00Z"
+  },
+  {
+    "id": "django-06",
+    "title": "What is the Django admin?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "The Django admin is a built-in interface for managing model records. We register models to make them available there. Staff users need the right permissions to use it.",
+    "example": "from django.contrib import admin\nfrom .models import Book\n\nadmin.site.register(Book)",
+    "createdAt": "2026-02-01T00:00:00Z"
+  },
+  {
+    "id": "sql-06",
+    "title": "How do you sort query results?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "ORDER BY sorts a result by one or more columns. ASC means ascending and DESC means descending. Without ORDER BY, row order is not guaranteed.",
+    "example": "SELECT title FROM books ORDER BY title ASC;",
+    "createdAt": "2026-02-02T00:00:00Z"
+  },
+  {
+    "id": "git-06",
+    "title": "What does git status show?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "git status shows the current branch and file changes. It separates staged changes, unstaged changes, and untracked files. It is useful before making a commit.",
+    "example": "git status",
+    "createdAt": "2026-02-03T00:00:00Z"
+  },
+  {
+    "id": "http-06",
+    "title": "What is a request header?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "A request header provides information about the request. For example, Accept describes acceptable response formats and Authorization can carry credentials.",
+    "example": "Accept: application/json\nAuthorization: Bearer <token>",
+    "createdAt": "2026-02-04T00:00:00Z"
+  },
+  {
+    "id": "react-06",
+    "title": "How do you handle a button click?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "Pass a function to the onClick prop. React calls it when the user clicks. Passing handleClick is different from calling handleClick() during rendering.",
+    "example": "function handleClick() {\n  setAnswerVisible(true);\n}\n\n<button onClick={handleClick}>Show answer</button>",
+    "createdAt": "2026-02-05T00:00:00Z"
+  },
+  {
+    "id": "python-07",
+    "title": "What is a Python module?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "A module is a Python file that contains code. We can import its functions, classes, or values into another file. This helps us organize a program.",
+    "example": "import math\nprint(math.sqrt(16))",
+    "createdAt": "2026-02-06T00:00:00Z"
+  },
+  {
+    "id": "django-07",
+    "title": "What is a Django project and what is an app?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "A project contains the settings and configuration of the whole website. An app is a part of the project with a focused purpose, such as accounts or books. A project can contain several apps.",
+    "example": "django-admin startproject config .\npython manage.py startapp books",
+    "createdAt": "2026-02-07T00:00:00Z"
+  },
+  {
+    "id": "sql-07",
+    "title": "What is the difference between DELETE and DROP?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "DELETE removes rows from a table. DROP removes the database object itself, such as the whole table. A DELETE without a WHERE condition can remove every row.",
+    "example": "DELETE FROM users WHERE id = 5;\n-- DROP TABLE users removes the table itself.",
+    "createdAt": "2026-02-08T00:00:00Z"
+  },
+  {
+    "id": "git-07",
+    "title": "What does .gitignore do?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": ".gitignore lists intentionally untracked files that Git should ignore. It does not stop tracking files that are already committed. Dependencies and local secrets usually belong in it.",
+    "example": "node_modules/\ndist/\n.env",
+    "createdAt": "2026-02-09T00:00:00Z"
+  },
+  {
+    "id": "http-07",
+    "title": "What is a query parameter?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "A query parameter is a value in the query part of a URL. APIs often use query parameters for search, filtering, sorting, and pagination.",
+    "example": "/api/questions?topic=Python&page=2",
+    "createdAt": "2026-02-10T00:00:00Z"
+  },
+  {
+    "id": "react-07",
+    "title": "Why do list items need keys?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "Keys help React match items between renders. Use a stable ID from the data. An array index can cause problems when items are inserted, removed, or reordered.",
+    "example": "function renderQuestion(question) {\n  return <QuestionCard key={question.id} question={question} />;\n}\n\nquestions.map(renderQuestion)",
+    "createdAt": "2026-02-11T00:00:00Z"
+  },
+  {
+    "id": "python-08",
+    "title": "What is the difference between a parameter and an argument?",
+    "topic": "Python",
+    "difficulty": "Easy",
+    "answer": "A parameter is a name in a function definition. An argument is the value passed when calling the function. The function uses that value through the parameter name.",
+    "example": "def double(number):  # number is a parameter\n    return number * 2\n\ndouble(4)  # 4 is an argument",
+    "createdAt": "2026-02-12T00:00:00Z"
+  },
+  {
+    "id": "django-08",
+    "title": "What is a QuerySet?",
+    "topic": "Django",
+    "difficulty": "Easy",
+    "answer": "A QuerySet represents a collection of database records and the query used to get them. We can filter and order it. Most QuerySets are lazy: the database query runs when the results are needed.",
+    "example": "books = Book.objects.filter(published=True).order_by(\"title\")",
+    "createdAt": "2026-02-13T00:00:00Z"
+  },
+  {
+    "id": "sql-08",
+    "title": "What does NULL mean in SQL?",
+    "topic": "SQL",
+    "difficulty": "Easy",
+    "answer": "NULL represents a missing or unknown value. Use IS NULL or IS NOT NULL to check it. Comparing a value with = NULL does not work like a normal equality check.",
+    "example": "SELECT * FROM users WHERE phone IS NULL;",
+    "createdAt": "2026-02-14T00:00:00Z"
+  },
+  {
+    "id": "git-08",
+    "title": "What is the difference between clone and init?",
+    "topic": "Git",
+    "difficulty": "Easy",
+    "answer": "git init starts a repository in a folder. git clone copies an existing repository and usually configures the original as a remote named origin.",
+    "example": "git clone https://example.com/team/project.git",
+    "createdAt": "2026-02-15T00:00:00Z"
+  },
+  {
+    "id": "http-08",
+    "title": "What is the difference between HTTP and HTTPS?",
+    "topic": "HTTP",
+    "difficulty": "Easy",
+    "answer": "HTTPS uses HTTP over a connection protected by TLS. It protects data in transit and helps authenticate the server. It does not automatically make application logic or stored data secure.",
+    "example": "https://example.com/api/questions",
+    "createdAt": "2026-02-16T00:00:00Z"
+  },
+  {
+    "id": "react-08",
+    "title": "How do you render something conditionally?",
+    "topic": "React",
+    "difficulty": "Easy",
+    "answer": "Use JavaScript to choose what JSX to return. A simple if statement works well. We can also use && to show an element only when a condition is true.",
+    "example": "if (loading) {\n  return <p>Loading...</p>;\n}\n\nreturn <QuestionList />;",
+    "createdAt": "2026-02-17T00:00:00Z"
+  },
+  {
+    "id": "python-09",
+    "title": "What is a list comprehension?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "A list comprehension builds a new list from an iterable. It can transform items and optionally keep only items that match a condition. It is useful when the expression stays simple.",
+    "example": "numbers = [1, 2, 3, 4]\nsquares = [number * number for number in numbers]",
+    "createdAt": "2026-02-18T00:00:00Z"
+  },
+  {
+    "id": "django-09",
+    "title": "What is the difference between get() and filter()?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "get() expects exactly one matching record. It raises an error if there are zero or multiple matches. filter() returns a QuerySet, which can contain zero, one, or many records.",
+    "example": "book = Book.objects.get(pk=1)\nbooks = Book.objects.filter(author=\"Dana\")",
+    "createdAt": "2026-02-19T00:00:00Z"
+  },
+  {
+    "id": "sql-09",
+    "title": "What is an INNER JOIN?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "An INNER JOIN combines rows from two tables when the join condition matches. Rows without a matching partner are not included in the result.",
+    "example": "SELECT orders.id, users.name\nFROM orders\nINNER JOIN users ON orders.user_id = users.id;",
+    "createdAt": "2026-02-20T00:00:00Z"
+  },
+  {
+    "id": "git-09",
+    "title": "What is the difference between fetch and pull?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "git fetch downloads remote objects and updates remote-tracking references. git pull fetches and then integrates changes into the current branch, usually with a merge or rebase.",
+    "example": "git fetch origin\ngit pull --ff-only",
+    "createdAt": "2026-02-21T00:00:00Z"
+  },
+  {
+    "id": "http-09",
+    "title": "What is the difference between 401 and 403?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "401 means valid authentication credentials are required or were not accepted. 403 means the server understands the request but refuses to authorize it. Logging in again is not always enough for 403.",
+    "example": "401 Unauthorized\n403 Forbidden",
+    "createdAt": "2026-02-22T00:00:00Z"
+  },
+  {
+    "id": "react-09",
+    "title": "What is useEffect used for?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "useEffect synchronizes a component with an external system, such as a timer or an asynchronous data source. It runs after a commit. It can return cleanup code.",
+    "example": "useEffect(function startTimer() {\n  const timer = setInterval(tick, 1000);\n  return function cleanup() {\n    clearInterval(timer);\n  };\n}, []);",
+    "createdAt": "2026-02-23T00:00:00Z"
+  },
+  {
+    "id": "python-10",
+    "title": "What is the difference between mutable and immutable objects?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "A mutable object can change in place, like a list or dictionary. An immutable object cannot change in place, like an integer or string. Reassigning a variable is different from changing an object.",
+    "example": "items = [1, 2]\nitems.append(3)  # Change the list\nname = \"Ali\"\nname = \"Dana\"  # Assign a different string",
+    "createdAt": "2026-02-24T00:00:00Z"
+  },
+  {
+    "id": "django-10",
+    "title": "What is middleware?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "Middleware is a layer in the request and response process. It can perform tasks such as authentication, session handling, and security checks before or after a view runs.",
+    "example": "MIDDLEWARE = [\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n]",
+    "createdAt": "2026-02-25T00:00:00Z"
+  },
+  {
+    "id": "sql-10",
+    "title": "What is a LEFT JOIN?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "A LEFT JOIN keeps every row from the left table. If the right table has no match, its columns contain NULL in the result. This helps find items with no related records.",
+    "example": "SELECT users.name, orders.id\nFROM users\nLEFT JOIN orders ON users.id = orders.user_id;",
+    "createdAt": "2026-02-26T00:00:00Z"
+  },
+  {
+    "id": "git-10",
+    "title": "What is a merge conflict?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "A conflict happens when Git cannot automatically combine changes. We edit the affected files, choose the correct result, and stage the resolved content before completing the operation.",
+    "example": "git status\n# Edit the conflicted files.\ngit add src/App.jsx\ngit commit",
+    "createdAt": "2026-02-27T00:00:00Z"
+  },
+  {
+    "id": "http-10",
+    "title": "What does status code 201 mean?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "201 Created means the request succeeded and created one or more resources. The response can identify the new resource, commonly through a Location header.",
+    "example": "HTTP/1.1 201 Created\nLocation: /api/questions/121",
+    "createdAt": "2026-02-28T00:00:00Z"
+  },
+  {
+    "id": "react-10",
+    "title": "What does an effect dependency array mean?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "The dependency array lists reactive values used by the effect. React compares them with the previous render using Object.is. Changed dependencies cause cleanup and setup to run again. Do not omit values just to stop an effect.",
+    "example": "useEffect(function loadData() {\n  loadTopic(topic);\n}, [topic]);",
+    "createdAt": "2026-03-01T00:00:00Z"
+  },
+  {
+    "id": "python-11",
+    "title": "What do *args and **kwargs do?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "*args collects extra positional arguments into a tuple. **kwargs collects extra keyword arguments into a dictionary. These names are common, but the stars provide the behavior.",
+    "example": "def show(*args, **kwargs):\n    print(args)\n    print(kwargs)\n\nshow(1, 2, name=\"Dastan\")",
+    "createdAt": "2026-03-02T00:00:00Z"
+  },
+  {
+    "id": "django-11",
+    "title": "What is the difference between authentication and authorization?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "Authentication checks who a user is. Authorization checks what that user is allowed to do. A logged-in user may still have no permission to edit a specific record.",
+    "example": "if request.user.is_authenticated:\n    can_edit = request.user.has_perm(\"books.change_book\")",
+    "createdAt": "2026-03-03T00:00:00Z"
+  },
+  {
+    "id": "sql-11",
+    "title": "What does GROUP BY do?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "GROUP BY puts rows with the same grouping values into groups. Aggregate functions then calculate a result for each group, such as a count or total.",
+    "example": "SELECT topic, COUNT(*)\nFROM questions\nGROUP BY topic;",
+    "createdAt": "2026-03-04T00:00:00Z"
+  },
+  {
+    "id": "git-11",
+    "title": "What does git diff show?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "git diff shows unstaged changes compared with the staging area. git diff --staged shows staged changes compared with the last commit. It helps us review what changed.",
+    "example": "git diff\ngit diff --staged",
+    "createdAt": "2026-03-05T00:00:00Z"
+  },
+  {
+    "id": "http-11",
+    "title": "What is the difference between PUT and PATCH?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "PUT generally creates or replaces the target resource state using the supplied representation. PATCH applies a set of changes. The API defines the accepted format and exact rules.",
+    "example": "PATCH /api/questions/1\nContent-Type: application/json\n\n{\"difficulty\": \"Easy\"}",
+    "createdAt": "2026-03-06T00:00:00Z"
+  },
+  {
+    "id": "react-11",
+    "title": "Why does an effect need cleanup?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "Cleanup stops or disconnects the work started by an effect. It can clear a timer, remove a listener, or prevent an outdated request from updating state. React calls cleanup before a changed effect runs again and on unmount.",
+    "example": "useEffect(function start() {\n  const timer = setTimeout(showMessage, 1000);\n  return function stop() {\n    clearTimeout(timer);\n  };\n}, []);",
+    "createdAt": "2026-03-07T00:00:00Z"
+  },
+  {
+    "id": "python-12",
+    "title": "What is a class and what is an object?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "A class defines data and behavior for a kind of thing. An object is an instance of that class. Instance methods can read or change the data of an object.",
+    "example": "class User:\n    def __init__(self, name):\n        self.name = name\n\nuser = User(\"Dastan\")",
+    "createdAt": "2026-03-08T00:00:00Z"
+  },
+  {
+    "id": "django-12",
+    "title": "What is a ForeignKey?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "A ForeignKey connects a record to one record in another model. It represents a many-to-one relationship. Many books can belong to the same author.",
+    "example": "author = models.ForeignKey(Author, on_delete=models.CASCADE)",
+    "createdAt": "2026-03-09T00:00:00Z"
+  },
+  {
+    "id": "sql-12",
+    "title": "What is the difference between WHERE and HAVING?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "WHERE filters individual rows before grouping. HAVING filters groups after aggregation. For example, HAVING can keep only groups with more than five records.",
+    "example": "SELECT topic, COUNT(*)\nFROM questions\nGROUP BY topic\nHAVING COUNT(*) > 5;",
+    "createdAt": "2026-03-10T00:00:00Z"
+  },
+  {
+    "id": "git-12",
+    "title": "What is a remote?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "A remote is a named connection to another repository. origin is a common name for the repository we cloned from. Fetch and push use remotes to exchange commits.",
+    "example": "git remote -v",
+    "createdAt": "2026-03-11T00:00:00Z"
+  },
+  {
+    "id": "http-12",
+    "title": "What does idempotent mean?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "An operation is idempotent when repeating the same request has the same intended server effect as making it once. GET, PUT, and DELETE have idempotent semantics. Response messages can still differ.",
+    "example": "DELETE /api/questions/1\n# Repeating it does not delete another question.",
+    "createdAt": "2026-03-12T00:00:00Z"
+  },
+  {
+    "id": "react-12",
+    "title": "Why should state be updated immutably?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "React state should be treated as read-only. Create a new array or object instead of changing the existing one. This preserves earlier state snapshots and makes updates easier to understand.",
+    "example": "setQuestions(function addQuestion(previous) {\n  return [...previous, newQuestion];\n});",
+    "createdAt": "2026-03-13T00:00:00Z"
+  },
+  {
+    "id": "python-13",
+    "title": "What is the purpose of self?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "self is the conventional name for the current instance in an instance method. Python passes the instance automatically when the method is called through an object.",
+    "example": "class Counter:\n    def __init__(self):\n        self.value = 0\n\n    def increase(self):\n        self.value += 1",
+    "createdAt": "2026-03-14T00:00:00Z"
+  },
+  {
+    "id": "django-13",
+    "title": "What does on_delete=models.CASCADE mean?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "When the referenced parent object is deleted through Django, CASCADE also deletes related child objects. Choose the deletion rule carefully because it affects related data.",
+    "example": "author = models.ForeignKey(Author, on_delete=models.CASCADE)",
+    "createdAt": "2026-03-15T00:00:00Z"
+  },
+  {
+    "id": "sql-13",
+    "title": "What is an index?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "An index is an extra data structure that can speed up some searches and sorting operations. It takes storage and makes writes more expensive because it must also be updated.",
+    "example": "CREATE INDEX users_email_index ON users(email);",
+    "createdAt": "2026-03-16T00:00:00Z"
+  },
+  {
+    "id": "git-13",
+    "title": "What does git stash do?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "git stash temporarily saves local changes so the working tree can be cleaned up. Untracked files need an extra option. Applying the stash later can still cause conflicts.",
+    "example": "git stash push -m \"search in progress\"\ngit stash pop",
+    "createdAt": "2026-03-17T00:00:00Z"
+  },
+  {
+    "id": "http-13",
+    "title": "What is CORS?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "CORS is a browser mechanism that uses server response headers to control cross-origin access from scripts. It is not authentication. A browser may send a preflight request before the actual request.",
+    "example": "Access-Control-Allow-Origin: https://frontend.example.com",
+    "createdAt": "2026-03-18T00:00:00Z"
+  },
+  {
+    "id": "react-13",
+    "title": "What does lifting state up mean?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "When components need to share state, move that state to their nearest common parent. Pass values and event handlers down through props. Keep unrelated local state in the component that uses it.",
+    "example": "<QuestionCard saved={savedIds.includes(question.id)} onSave={toggleSaved} />",
+    "createdAt": "2026-03-19T00:00:00Z"
+  },
+  {
+    "id": "python-14",
+    "title": "What is an iterator?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "An iterator produces items one at a time. iter() gets an iterator and next() gets its next item. When no items remain, it raises StopIteration.",
+    "example": "iterator = iter([10, 20])\nprint(next(iterator))\nprint(next(iterator))",
+    "createdAt": "2026-03-20T00:00:00Z"
+  },
+  {
+    "id": "django-14",
+    "title": "What is a ModelForm?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "A ModelForm builds form fields from a Django model. It validates submitted data and can save a model instance. Explicitly list the fields that users should be allowed to edit.",
+    "example": "class BookForm(forms.ModelForm):\n    class Meta:\n        model = Book\n        fields = [\"title\", \"author\"]",
+    "createdAt": "2026-03-21T00:00:00Z"
+  },
+  {
+    "id": "sql-14",
+    "title": "What does DISTINCT do?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "DISTINCT removes duplicate rows from a query result. It compares the selected columns together. It is useful when we need a list of unique values.",
+    "example": "SELECT DISTINCT topic FROM questions;",
+    "createdAt": "2026-03-22T00:00:00Z"
+  },
+  {
+    "id": "git-14",
+    "title": "What is the difference between merge and rebase?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "Merge combines histories and can create a merge commit. Rebase replays commits on a different base, creating new commit identities. Be careful when rewriting history that other people already use.",
+    "example": "git switch feature\ngit rebase main",
+    "createdAt": "2026-03-23T00:00:00Z"
+  },
+  {
+    "id": "http-14",
+    "title": "What is a cookie?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "A cookie is data that a server asks a browser to store and send with suitable later requests. Cookies are often used for sessions. Secure, HttpOnly, and SameSite affect how they are handled.",
+    "example": "Set-Cookie: session=abc; Secure; HttpOnly; SameSite=Lax",
+    "createdAt": "2026-03-24T00:00:00Z"
+  },
+  {
+    "id": "react-14",
+    "title": "What can cause a React component to render again?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "A state update can schedule a render. A component also normally renders when its parent renders, or when a context value it reads changes. A render does not mean every DOM node changes.",
+    "example": "setSearchText(\"Django\");\n// React renders with the next search value.",
+    "createdAt": "2026-03-25T00:00:00Z"
+  },
+  {
+    "id": "python-15",
+    "title": "What is a generator?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "A generator is an iterator that produces values as needed. A function with yield creates a generator. This can save memory when processing a large sequence.",
+    "example": "def count_up_to(limit):\n    number = 1\n    while number <= limit:\n        yield number\n        number += 1",
+    "createdAt": "2026-03-26T00:00:00Z"
+  },
+  {
+    "id": "django-15",
+    "title": "What is a serializer in Django REST Framework?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "A serializer converts data such as model instances into basic types that can be rendered as JSON. It can also validate incoming data before creating or updating records.",
+    "example": "class BookSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Book\n        fields = [\"id\", \"title\"]",
+    "createdAt": "2026-03-27T00:00:00Z"
+  },
+  {
+    "id": "sql-15",
+    "title": "What is a database transaction?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "A transaction groups operations into one logical unit. COMMIT saves the changes. ROLLBACK cancels uncommitted changes. Transactions help keep related changes consistent.",
+    "example": "BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;",
+    "createdAt": "2026-03-28T00:00:00Z"
+  },
+  {
+    "id": "git-15",
+    "title": "How do you rename the most recent commit?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "git commit --amend lets us replace the latest commit. Changing the message creates a new commit identity. Avoid rewriting shared history without coordinating with the team.",
+    "example": "git commit --amend -m \"Add question filters\"",
+    "createdAt": "2026-03-29T00:00:00Z"
+  },
+  {
+    "id": "http-15",
+    "title": "What is a REST API?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "REST is an architectural style with constraints such as a uniform interface and stateless communication. A typical REST-style web API identifies resources with URLs and uses HTTP methods to work with them.",
+    "example": "GET /api/books\nGET /api/books/7\nPOST /api/books",
+    "createdAt": "2026-03-30T00:00:00Z"
+  },
+  {
+    "id": "react-15",
+    "title": "What is the difference between render and commit?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "During render, React calls components to calculate the next UI. During commit, React applies the needed changes to the DOM. Rendering should stay pure because React can repeat or abandon a render.",
+    "example": "function Title(props) {\n  return <h1>{props.text}</h1>;\n}",
+    "createdAt": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "python-16",
+    "title": "What does the with statement do?",
+    "topic": "Python",
+    "difficulty": "Medium",
+    "answer": "with manages a resource through a context manager. It runs setup and cleanup code, including when an error happens. A common example is closing a file after reading it.",
+    "example": "with open(\"notes.txt\", encoding=\"utf-8\") as file:\n    text = file.read()",
+    "createdAt": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "django-16",
+    "title": "What is the difference between static and media files?",
+    "topic": "Django",
+    "difficulty": "Medium",
+    "answer": "Static files are application assets such as CSS and JavaScript. Media files are user uploads. They have different purposes and need suitable storage and serving configuration in production.",
+    "example": "STATIC_URL = \"static/\"\nMEDIA_URL = \"media/\"",
+    "createdAt": "2026-04-02T00:00:00Z"
+  },
+  {
+    "id": "sql-16",
+    "title": "What is database normalization?",
+    "topic": "SQL",
+    "difficulty": "Medium",
+    "answer": "Normalization organizes data to reduce unnecessary duplication and update problems. We often split separate concepts into related tables. The right design also depends on how the application uses its data.",
+    "example": "users(id, name)\norders(id, user_id, total)",
+    "createdAt": "2026-04-03T00:00:00Z"
+  },
+  {
+    "id": "git-16",
+    "title": "What is a Git tag?",
+    "topic": "Git",
+    "difficulty": "Medium",
+    "answer": "A tag names a particular point in history. Tags are often used for releases. An annotated tag also stores information such as a message and tagger.",
+    "example": "git tag -a v1.0.0 -m \"First release\"",
+    "createdAt": "2026-04-04T00:00:00Z"
+  },
+  {
+    "id": "http-16",
+    "title": "What is the difference between a path parameter and a query parameter?",
+    "topic": "HTTP",
+    "difficulty": "Medium",
+    "answer": "A path parameter is part of the URL path and often identifies a resource. A query parameter comes after the question mark and often changes how a collection is searched or returned.",
+    "example": "/api/books/7\n/api/books?author=Dana",
+    "createdAt": "2026-04-05T00:00:00Z"
+  },
+  {
+    "id": "react-16",
+    "title": "Why does an effect sometimes run twice in development?",
+    "topic": "React",
+    "difficulty": "Medium",
+    "answer": "Strict Mode runs an extra setup and cleanup cycle for effects in development. This helps find missing cleanup and other mistakes. This extra check is not a production behavior.",
+    "example": "<React.StrictMode>\n  <App />\n</React.StrictMode>",
+    "createdAt": "2026-04-06T00:00:00Z"
+  },
+  {
+    "id": "python-17",
+    "title": "Why can a mutable default argument be a problem?",
+    "topic": "Python",
+    "difficulty": "Hard",
+    "answer": "Default argument values are created when the function is defined. A default list can be shared between calls. Use None and create a new list inside the function when each call needs its own list.",
+    "example": "def add_item(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items",
+    "createdAt": "2026-04-07T00:00:00Z"
+  },
+  {
+    "id": "django-17",
+    "title": "What is the N+1 query problem?",
+    "topic": "Django",
+    "difficulty": "Hard",
+    "answer": "The N+1 problem happens when one query loads a list and extra queries load related data for each item. select_related() and prefetch_related() can reduce these extra queries.",
+    "example": "books = Book.objects.select_related(\"author\").all()",
+    "createdAt": "2026-04-08T00:00:00Z"
+  },
+  {
+    "id": "sql-17",
+    "title": "What is SQL injection and how do you prevent it?",
+    "topic": "SQL",
+    "difficulty": "Hard",
+    "answer": "SQL injection happens when untrusted input changes the meaning of a query. Use parameterized queries or an ORM that safely binds parameters. Do not build SQL by joining raw user input into query text.",
+    "example": "# Python DB-API placeholder syntax depends on the driver.\ncursor.execute(\"SELECT * FROM users WHERE id = %s\", [user_id])",
+    "createdAt": "2026-04-09T00:00:00Z"
+  },
+  {
+    "id": "git-17",
+    "title": "What is the difference between revert and reset?",
+    "topic": "Git",
+    "difficulty": "Hard",
+    "answer": "Revert creates a new commit that undoes changes from an earlier commit. Reset moves a reference and may also change the staging area or working files depending on its mode. Revert is often suitable for undoing a shared commit.",
+    "example": "git revert <commit-id>",
+    "createdAt": "2026-04-10T00:00:00Z"
+  }
+]
