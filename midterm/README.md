@@ -4,7 +4,7 @@ InterviewHub is a React single page application for practicing developer intervi
 You can search, filter, sort and page through 100 questions, open a question to see its answer,
 and add your own questions.
 
-**Live demo:** 
+**Live demo: https://opabekdastan.github.io/react26/midterm/**
 
 ## Features
 
