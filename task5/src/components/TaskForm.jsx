@@ -1,109 +1,157 @@
 import { useState } from "react";
+import { CATEGORIES, PRIORITIES } from "../services/service.js";
 
+/**
+ * One form for both "create" and "edit".
+ * It is a controlled form: every input value is taken from the `form` state.
+ */
 function TaskForm({ mode, initialTask, saving, error, onSave, onCancel }) {
-  const [name, setName] = useState(initialTask.name || "");
-  const [description, setDescription] = useState(initialTask.description || "");
-  const [category, setCategory] = useState(initialTask.category || "Study");
-  const [priority, setPriority] = useState(initialTask.priority || "Medium");
-  const [assignee, setAssignee] = useState(initialTask.assignee || "");
-  const [deadline, setDeadline] = useState(initialTask.deadline || "");
-  const [estimatedHours, setEstimatedHours] = useState(
-    initialTask.estimatedHours || 1,
-  );
-  const [localError, setLocalError] = useState("");
+  const [form, setForm] = useState({
+    name: initialTask.name || "",
+    description: initialTask.description || "",
+    category: initialTask.category || CATEGORIES[0],
+    priority: initialTask.priority || "Medium",
+    assignee: initialTask.assignee || "",
+    deadline: initialTask.deadline || "",
+    estimatedHours: initialTask.estimatedHours || 1,
+  });
+
+  const [validationError, setValidationError] = useState("");
+
+  // one handler for all the fields: the input name = the key in the state
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
 
   function handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault(); // without this the browser reloads the page
 
-    if (name.trim() === "") {
-      setLocalError("Name is required");
+    if (form.name.trim() === "" || form.description.trim() === "") {
+      setValidationError("Name and description are required");
       return;
     }
 
-    setLocalError("");
-
+    setValidationError("");
     onSave({
-      name: name.trim(),
-      description: description.trim(),
-      category: category,
-      priority: priority,
-      assignee: assignee.trim(),
-      deadline: deadline,
-      estimatedHours: Number(estimatedHours),
+      ...form,
+      name: form.name.trim(),
+      description: form.description.trim(),
+      assignee: form.assignee.trim() || "Dastan",
+      deadline: form.deadline || new Date().toISOString().slice(0, 10),
+      estimatedHours: Number(form.estimatedHours) || 1,
     });
   }
 
   return (
-    <form className="card form" onSubmit={handleSubmit}>
-      <h2>{mode === "create" ? "New task" : "Edit task #" + initialTask.id}</h2>
+    <form className="task-form" onSubmit={handleSubmit}>
+      <h2>{mode === "create" ? "New task" : "Edit task"}</h2>
 
       <div className="form-grid">
-        <label>
-          Name
-          <input value={name} onChange={(e) => setName(e.target.value)} />
+        <label className="field">
+          <span>Name</span>
+          <input
+            className="input"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Task name"
+          />
         </label>
 
-        <label>
-          Assignee
-          <input value={assignee} onChange={(e) => setAssignee(e.target.value)} />
+        <label className="field">
+          <span>Assignee</span>
+          <input
+            className="input"
+            name="assignee"
+            value={form.assignee}
+            onChange={handleChange}
+            placeholder="Who does it"
+          />
         </label>
 
-        <label className="full">
-          Description
+        <label className="field full">
+          <span>Description</span>
           <textarea
-            rows="3"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            className="input"
+            name="description"
+            rows={3}
+            value={form.description}
+            onChange={handleChange}
+            placeholder="Short description"
           />
         </label>
 
-        <label>
-          Category
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option>Study</option>
-            <option>Project</option>
-            <option>Personal</option>
-            <option>Health</option>
+        <label className="field">
+          <span>Category</span>
+          <select
+            className="input"
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+          >
+            {CATEGORIES.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
         </label>
 
-        <label>
-          Priority
-          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
+        <label className="field">
+          <span>Priority</span>
+          <select
+            className="input"
+            name="priority"
+            value={form.priority}
+            onChange={handleChange}
+          >
+            {PRIORITIES.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
         </label>
 
-        <label>
-          Deadline
+        <label className="field">
+          <span>Deadline</span>
           <input
+            className="input"
             type="date"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
+            name="deadline"
+            value={form.deadline}
+            onChange={handleChange}
           />
         </label>
 
-        <label>
-          Estimated hours
+        <label className="field">
+          <span>Estimated hours</span>
           <input
+            className="input"
             type="number"
             min="1"
-            value={estimatedHours}
-            onChange={(e) => setEstimatedHours(e.target.value)}
+            max="40"
+            name="estimatedHours"
+            value={form.estimatedHours}
+            onChange={handleChange}
           />
         </label>
       </div>
 
-      {localError !== "" && <p className="state error">{localError}</p>}
-      {error !== "" && <p className="state error">Error: {error}</p>}
+      {validationError && <p className="message error">{validationError}</p>}
+      {error && <p className="message error">{error}</p>}
 
-      <div className="actions">
-        <button className="primary" type="submit" disabled={saving}>
+      <div className="form-actions">
+        <button className="btn btn-primary" type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save"}
         </button>
-        <button type="button" onClick={onCancel} disabled={saving}>
+        <button
+          className="btn"
+          type="button"
+          onClick={onCancel}
+          disabled={saving}
+        >
           Cancel
         </button>
       </div>
