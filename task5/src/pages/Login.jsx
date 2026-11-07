@@ -2,11 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 
-/**
- * Placeholder for future authentication.
- * There is no real login yet: the form only validates the fields
- * and shows a message. No request is sent.
- */
 function Login() {
   usePageTitle("Login");
 

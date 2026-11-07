@@ -5,10 +5,6 @@ import {
   SORT_OPTIONS,
 } from "../services/service.js";
 
-/**
- * "Dumb" component: it only shows the controls and calls the callbacks.
- * The real values live in the URL (useSearchParams) inside the page.
- */
 function Filters({
   search,
   onSearchChange,

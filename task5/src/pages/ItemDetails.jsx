@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router";
 import {
   getTaskById,
   updateTask,
   deleteTask,
 } from "../services/service.js";
+import { useFetch } from "../hooks/useFetch.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import { formatDate, daysLeft, isOverdue } from "../utils/format.js";
 import TaskForm from "../components/TaskForm.jsx";
@@ -13,20 +14,21 @@ import ErrorBox from "../components/ErrorBox.jsx";
 import EmptyBox from "../components/EmptyBox.jsx";
 
 function ItemDetails() {
-  /**
-   * useParams reads the dynamic part of the route.
-   * Route is <Route path=":id" />, URL is /items/7 -> id === "7" (always a string).
-   */
   const { id } = useParams();
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [task, setTask] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [notFound, setNotFound] = useState(false);
-  const [reloadCount, setReloadCount] = useState(0);
+  const {
+    data: task,
+    setData: setTask,
+    loading,
+    error,
+    reload,
+  } = useFetch((signal) => getTaskById(id, signal), [id]);
+
+  // 404 = the id is fine but there is no such task; anything else = server problem
+  const notFound = error?.status === 404;
 
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -34,55 +36,6 @@ function ItemDetails() {
   const [busy, setBusy] = useState(false);
 
   usePageTitle(task ? task.name : "Task " + id);
-
-  // "abc" or "-3" is not a valid id -> we do not even call the API
-  const isValidId = /^\d+$/.test(id);
-
-  /**
-   * Loading of one task by id.
-   * The effect depends on [id], so clicking another task reloads the data.
-   *
-   * AbortController + the cleanup function solve the stale request problem:
-   * if the user opens task 1 and then quickly task 2, the first request is
-   * cancelled and its late answer can never be written into the state.
-   */
-  useEffect(() => {
-    if (!isValidId) {
-      setNotFound(true);
-      setLoading(false);
-      return;
-    }
-
-    const controller = new AbortController();
-
-    async function loadTask() {
-      setLoading(true);
-      setError("");
-      setNotFound(false);
-
-      try {
-        const data = await getTaskById(id, controller.signal);
-        setTask(data);
-        setLoading(false);
-      } catch (err) {
-        if (err.name === "AbortError") {
-          return; // outdated request, a newer one is already running
-        }
-
-        if (err.status === 404) {
-          setNotFound(true); // the id is correct but there is no such task
-        } else {
-          setError(err.message); // network / server problem
-        }
-
-        setLoading(false);
-      }
-    }
-
-    loadTask();
-
-    return () => controller.abort(); // cleanup: cancel the previous request
-  }, [id, reloadCount, isValidId]);
 
   // "Back" works only if we really came from another page of the app
   const canGoBack = location.key !== "default";
@@ -161,10 +114,7 @@ function ItemDetails() {
   if (error) {
     return (
       <section className="page details">
-        <ErrorBox
-          message={error}
-          onRetry={() => setReloadCount((prev) => prev + 1)}
-        />
+        <ErrorBox message={error.message} onRetry={reload} />
         <p className="center">
           <Link className="btn" to="/items">
             All tasks

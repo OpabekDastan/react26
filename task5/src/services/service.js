@@ -6,13 +6,6 @@ import {
   deleteItem,
 } from "../api/fakeApi.js";
 
-/**
- * SERVICE LAYER.
- * This is the ONLY file in the app that talks to the API.
- * Pages and components import functions from here and never touch fakeApi.js.
- * If tomorrow we replace the fake API with a real fetch(), only this file changes.
- */
-
 // how many cards we show on one page of /tasks
 export const PAGE_SIZE = 6;
 
@@ -48,10 +41,6 @@ function buildQuery(params) {
   return query.toString();
 }
 
-/**
- * One page of tasks for the list page.
- * `signal` comes from an AbortController, so an old request can be cancelled.
- */
 export function getTasks(params = {}, signal) {
   return getItemsList(buildQuery({ limit: PAGE_SIZE, ...params }), { signal });
 }
@@ -63,8 +52,13 @@ export function getAllTasks(params = {}, signal) {
   });
 }
 
-// one task by id (details page)
 export function getTaskById(id, signal) {
+  if (!/^\d+$/.test(String(id))) {
+    const error = new Error("Item not found");
+    error.status = 404;
+    return Promise.reject(error);
+  }
+
   return getItem(id, { signal });
 }
 

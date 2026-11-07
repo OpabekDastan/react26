@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { CATEGORIES, PRIORITIES } from "../services/service.js";
 
-/**
- * One form for both "create" and "edit".
- * It is a controlled form: every input value is taken from the `form` state.
- */
 function TaskForm({ mode, initialTask, saving, error, onSave, onCancel }) {
   const [form, setForm] = useState({
     name: initialTask.name || "",

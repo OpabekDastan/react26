@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import { getAllTasks, CATEGORIES } from "../services/service.js";
+import { useTaskFilters } from "../hooks/useTaskFilters.js";
+import { useFetch } from "../hooks/useFetch.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import { formatDate, isOverdue } from "../utils/format.js";
 import StatCard from "../components/StatCard.jsx";
@@ -24,48 +25,18 @@ function countBy(tasks, field) {
 function Dashboard() {
   usePageTitle("Dashboard");
 
-  // the interactive filter is also kept in the URL, so the view can be shared
-  const [searchParams, setSearchParams] = useSearchParams();
-  const category = searchParams.get("category") || "";
+  const { filters, setFilter } = useTaskFilters();
+  const category = filters.category;
 
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [reloadCount, setReloadCount] = useState(0);
+  const { data, loading, error, reload } = useFetch(
+    (signal) => getAllTasks({ category }, signal),
+    [category],
+  );
 
-  // the filter is sent to the API, so the statistics are recalculated from
-  // the data that the server returns, not from a hard-coded array
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadTasks() {
-      setLoading(true);
-      setError("");
-
-      try {
-        const response = await getAllTasks({ category }, controller.signal);
-        setTasks(response.data);
-        setLoading(false);
-      } catch (err) {
-        if (err.name === "AbortError") {
-          return;
-        }
-        setError(err.message);
-        setLoading(false);
-      }
-    }
-
-    loadTasks();
-
-    return () => controller.abort();
-  }, [category, reloadCount]);
+  const tasks = data ? data.data : [];
 
   function handleCategoryChange(value) {
-    if (value === "") {
-      setSearchParams({});
-    } else {
-      setSearchParams({ category: value });
-    }
+    setFilter("category", value);
   }
 
   if (loading) {
@@ -79,10 +50,7 @@ function Dashboard() {
   if (error) {
     return (
       <section className="page dashboard">
-        <ErrorBox
-          message={error}
-          onRetry={() => setReloadCount((prev) => prev + 1)}
-        />
+        <ErrorBox message={error.message} onRetry={reload} />
       </section>
     );
   }

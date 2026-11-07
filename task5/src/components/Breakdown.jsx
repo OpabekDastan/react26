@@ -1,10 +1,5 @@
 import { Link } from "react-router";
 
-/**
- * Reusable "breakdown" block: a list of rows with a simple bar.
- * `rows` is [{ label, value, to }] — `to` is an optional link to the
- * tasks list with the filter already applied (?category=Study).
- */
 function Breakdown({ title, rows }) {
   const max = Math.max(1, ...rows.map((row) => row.value));
 

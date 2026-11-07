@@ -1,5 +1,3 @@
-// Reusable pagination. The current page is stored in the URL (?page=2),
-// this component only says "the user clicked page N".
 function Pagination({ page, totalPages, onChange }) {
   if (totalPages <= 1) {
     return null;

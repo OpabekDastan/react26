@@ -1,13 +1,6 @@
 import { Link } from "react-router";
 import { formatDate, isOverdue } from "../utils/format.js";
 
-/**
- * Reusable card of one task.
- * It is used on the tasks list page and on the dashboard,
- * so it only receives data through props and does no requests itself.
- *
- * <Link> changes the URL WITHOUT reloading the page (no <a href> reload).
- */
 function Card({ task }) {
   const overdue = isOverdue(task);
 

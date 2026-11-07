@@ -1,14 +1,6 @@
 import { API_CONFIG, DATA_KEY } from "./settings.js";
 import { initialDataSample } from "./initial-data-sample.js";
 
-/**
- * This file is the "fake backend".
- * It behaves like a real server: it answers with a delay, it can fail,
- * and it does search / filtering / sorting / pagination on its own side.
- *
- * Components never import this file directly -> they use services/service.js.
- */
-
 // error object with name "AbortError", exactly like a cancelled fetch() gives
 function createAbortError() {
   const error = new Error("Request aborted");
@@ -83,10 +75,6 @@ initializeDatabase();
 // High / Medium / Low -> number, so we can sort by priority
 const PRIORITY_WEIGHT = { High: 3, Medium: 2, Low: 1 };
 
-/**
- * GET /items?search=&category=&priority=&status=&sort=&page=&limit=
- * Returns a page of items + meta info, like a real paginated API.
- */
 export async function getItemsList(query = "", options = {}) {
   return fakeRequest(() => {
     const params = new URLSearchParams(query);

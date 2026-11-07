@@ -1,8 +1,6 @@
 import { Link, useLocation } from "react-router";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 
-// This page is rendered by the route <Route path="*" />,
-// which matches every address that no other route matched.
 function NotFound() {
   usePageTitle("Page not found");
 

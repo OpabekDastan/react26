@@ -1,6 +1,3 @@
-// Seed data for the fake API.
-// It is written into localStorage once, on the first start of the app.
-// Every task has 10 fields -> enough for the details page and for the dashboard.
 export const initialDataSample = [
   {
     id: 1,
