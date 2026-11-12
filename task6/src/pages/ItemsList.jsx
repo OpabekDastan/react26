@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { getTasks, createTask, PAGE_SIZE } from "../services/service.js";
+import { PAGE_SIZE } from "../services/service.js";
 import { useTaskFilters } from "../hooks/useTaskFilters.js";
-import { useFetch } from "../hooks/useFetch.js";
+import { useTasksList, useCreateTask } from "../hooks/useTasks.js";
 import { useDebouncedValue } from "../hooks/useDebouncedValue.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import Card from "../components/Card.jsx";
@@ -30,18 +30,23 @@ function ItemsList() {
 
   const { filters, setFilter, resetFilters, hasFilters } = useTaskFilters();
 
+  // every filters combination is a separate cache entry (see taskKeys.list)
   const {
     data,
-    loading,
+    isPending: loading,
+    isFetching,
     error,
-    reload,
-  } = useFetch((signal) => getTasks(filters, signal), [filters]);
+    refetch: reload,
+  } = useTasksList(filters);
+
+  const createMutation = useCreateTask();
 
   const result = data || EMPTY_RESULT;
+  // error box only when there is nothing cached to show
+  const failed = Boolean(error) && !data;
 
   // create form state
   const [formOpen, setFormOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
   const [message, setMessage] = useState("");
 
@@ -74,19 +79,16 @@ function ItemsList() {
   }
 
   async function handleCreate(formData) {
-    setSaving(true);
     setFormError("");
 
     try {
-      const created = await createTask(formData);
+      // the mutation invalidates the cached lists, so the new task appears without reload()
+      const created = await createMutation.mutateAsync(formData);
 
       setFormOpen(false);
       setMessage('Task "' + created.name + '" was created');
-      reload(); // load the list from the API again
     } catch (err) {
       setFormError(err.message);
-    } finally {
-      setSaving(false);
     }
   }
 
@@ -118,7 +120,7 @@ function ItemsList() {
         <TaskForm
           mode="create"
           initialTask={emptyTask}
-          saving={saving}
+          saving={createMutation.isPending}
           error={formError}
           onSave={handleCreate}
           onCancel={() => setFormOpen(false)}
@@ -142,9 +144,9 @@ function ItemsList() {
       {/* three states: loading / error / empty, and only then the data */}
       {loading && <Loader text="Loading tasks..." />}
 
-      {!loading && error && <ErrorBox message={error.message} onRetry={reload} />}
+      {!loading && failed && <ErrorBox message={error.message} onRetry={reload} />}
 
-      {!loading && !error && result.data.length === 0 && (
+      {!loading && !failed && result.data.length === 0 && (
         <EmptyBox text="No tasks match your filters">
           {hasFilters && (
             <button className="btn" onClick={handleReset}>
@@ -154,10 +156,11 @@ function ItemsList() {
         </EmptyBox>
       )}
 
-      {!loading && !error && result.data.length > 0 && (
+      {!loading && !failed && result.data.length > 0 && (
         <>
           <p className="muted result-count">
             Showing {firstOnPage}–{lastOnPage} of {result.total} tasks
+            {isFetching && " · updating..."}
           </p>
 
           <div className="card-grid">

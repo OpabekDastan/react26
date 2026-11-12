@@ -1,5 +1,5 @@
 {
-  "name": "task5",
+  "name": "task6",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "vite build && gh-pages -d dist -e task5 --add"
+    "deploy": "vite build && gh-pages -d dist -e task6 --add"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.107.1",
+    "firebase": "^13.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.9.1"

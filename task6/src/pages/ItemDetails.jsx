@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router";
-import {
-  getTaskById,
-  updateTask,
-  deleteTask,
-} from "../services/service.js";
-import { useFetch } from "../hooks/useFetch.js";
+import { useTask, useUpdateTask, useDeleteTask } from "../hooks/useTasks.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import { formatDate, daysLeft, isOverdue } from "../utils/format.js";
 import TaskForm from "../components/TaskForm.jsx";
@@ -19,21 +14,26 @@ function ItemDetails() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // a task opened before is shown from the cache at once
   const {
     data: task,
-    setData: setTask,
-    loading,
+    isPending: loading,
     error,
-    reload,
-  } = useFetch((signal) => getTaskById(id, signal), [id]);
+    refetch: reload,
+  } = useTask(id);
+
+  // mutations update the cache of this task and invalidate the lists
+  const updateMutation = useUpdateTask();
+  const deleteMutation = useDeleteTask();
 
   // 404 = the id is fine but there is no such task; anything else = server problem
   const notFound = error?.status === 404;
 
   const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [actionError, setActionError] = useState("");
-  const [busy, setBusy] = useState(false);
+
+  const saving = updateMutation.isPending;
+  const busy = updateMutation.isPending || deleteMutation.isPending;
 
   usePageTitle(task ? task.name : "Task " + id);
 
@@ -41,31 +41,26 @@ function ItemDetails() {
   const canGoBack = location.key !== "default";
 
   async function handleToggle() {
-    setBusy(true);
     setActionError("");
 
     try {
-      const updated = await updateTask(task.id, { completed: !task.completed });
-      setTask(updated);
+      await updateMutation.mutateAsync({
+        id: task.id,
+        changes: { completed: !task.completed },
+      });
     } catch (err) {
       setActionError(err.message);
-    } finally {
-      setBusy(false);
     }
   }
 
   async function handleSave(formData) {
-    setSaving(true);
     setActionError("");
 
     try {
-      const updated = await updateTask(task.id, formData);
-      setTask(updated);
+      await updateMutation.mutateAsync({ id: task.id, changes: formData });
       setEditing(false);
     } catch (err) {
       setActionError(err.message);
-    } finally {
-      setSaving(false);
     }
   }
 
@@ -74,15 +69,13 @@ function ItemDetails() {
       return;
     }
 
-    setBusy(true);
     setActionError("");
 
     try {
-      await deleteTask(task.id);
+      await deleteMutation.mutateAsync(task.id);
       navigate("/items"); // after deleting there is nothing to show here
     } catch (err) {
       setActionError(err.message);
-      setBusy(false);
     }
   }
 
@@ -111,7 +104,8 @@ function ItemDetails() {
     );
   }
 
-  if (error) {
+  // error of a background refetch is not shown if we already have the task in the cache
+  if (error && !task) {
     return (
       <section className="page details">
         <ErrorBox message={error.message} onRetry={reload} />

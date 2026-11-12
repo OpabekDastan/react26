@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import { getAllTasks, CATEGORIES } from "../services/service.js";
+import { CATEGORIES } from "../services/service.js";
 import { useTaskFilters } from "../hooks/useTaskFilters.js";
-import { useFetch } from "../hooks/useFetch.js";
+import { useAllTasks } from "../hooks/useTasks.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import { formatDate, isOverdue } from "../utils/format.js";
 import StatCard from "../components/StatCard.jsx";
@@ -28,10 +28,8 @@ function Dashboard() {
   const { filters, setFilter } = useTaskFilters();
   const category = filters.category;
 
-  const { data, loading, error, reload } = useFetch(
-    (signal) => getAllTasks({ category }, signal),
-    [category],
-  );
+  // cached by category: switching back to a category shows the saved statistics at once
+  const { data, isPending: loading, error, refetch: reload } = useAllTasks(category);
 
   const tasks = data ? data.data : [];
 
@@ -47,7 +45,8 @@ function Dashboard() {
     );
   }
 
-  if (error) {
+  // a failed background refetch keeps the old statistics on the screen
+  if (error && !data) {
     return (
       <section className="page dashboard">
         <ErrorBox message={error.message} onRetry={reload} />

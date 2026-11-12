@@ -14,12 +14,12 @@ function About() {
           <p>
             My name is Dastan. I am a student and I am learning front-end
             development: HTML, CSS, JavaScript and now React. This project is
-            the fifth homework of the React course, every homework is built on
+            the sixth homework of the React course, every homework is built on
             top of the previous one.
           </p>
           <ul className="list">
             <li>Languages: JavaScript, Python</li>
-            <li>Tools: React, Vite, Git, GitHub Pages</li>
+            <li>Tools: React, Vite, TanStack Query, Firebase, Git, GitHub Pages</li>
             <li>Contact: github.com/OpabekDastan</li>
           </ul>
         </article>
