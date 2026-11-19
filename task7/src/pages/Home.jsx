@@ -61,6 +61,15 @@ function Home() {
           </p>
           <Link to="/dashboard">Go to dashboard →</Link>
         </div>
+
+        <div className="feature">
+          <h3>Works offline</h3>
+          <p>
+            The app can be installed like a normal app. Recipes from a public
+            API and pages you opened before stay available without the internet.
+          </p>
+          <Link to="/recipes">Browse recipes →</Link>
+        </div>
       </div>
     </section>
   );

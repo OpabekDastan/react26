@@ -1,5 +1,5 @@
 {
-  "name": "task6",
+  "name": "task7",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "vite build && gh-pages -d dist -e task6 --add"
+    "deploy": "vite build && gh-pages -d dist -e task7 --add"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.107.1",

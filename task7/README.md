@@ -1,37 +1,25 @@
-# Task 6 — Server Data, Caching & Firebase Authentication
+# Task 7 — Progressive Web App
 
-Task Manager SPA built with React + React Router on top of task 5.
-New in this homework: Firebase Authentication (Email/Password + Google), protected routes,
-environment variables and server-data caching with TanStack Query.
+Task Manager SPA (React + React Router + TanStack Query + Firebase Auth) turned into an
+**installable PWA** that works offline and on phones from 320px.
+All features from tasks 4–6 are preserved.
 
-**Live demo:** https://opabekdastan.github.io/react26/task6/
+**Live demo:** https://opabekdastan.github.io/react26/task7/
 
 ## Run
 
 ```bash
 npm install
-cp .env.example .env.local   # then fill in your Firebase config
+cp .env.example .env.local   # fill in your Firebase config (see task 6)
 npm run dev
 ```
 
-## Firebase setup
+The Service Worker is registered **only in the built app**. To test the PWA locally:
 
-1. Create a project in the [Firebase console](https://console.firebase.google.com/) and add a **Web app**.
-2. **Authentication → Sign-in method**: enable **Email/Password** and **Google**.
-3. **Authentication → Settings → Authorized domains**: add `localhost` and `opabekdastan.github.io`.
-4. Copy the web app config into `.env.local`:
-
-| Variable                             | Where to find it        |
-| ------------------------------------ | ----------------------- |
-| `VITE_FIREBASE_API_KEY`              | `apiKey`                |
-| `VITE_FIREBASE_AUTH_DOMAIN`          | `authDomain`            |
-| `VITE_FIREBASE_PROJECT_ID`           | `projectId`             |
-| `VITE_FIREBASE_STORAGE_BUCKET`       | `storageBucket`         |
-| `VITE_FIREBASE_MESSAGING_SENDER_ID`  | `messagingSenderId`     |
-| `VITE_FIREBASE_APP_ID`               | `appId`                 |
-
-`.env.local` is in `.gitignore`, only the template `.env.example` is committed.
-Vite exposes to the browser only the variables with the `VITE_` prefix.
+```bash
+npm run build
+npx vite preview
+```
 
 ## Deploy (GitHub Pages)
 
@@ -39,115 +27,132 @@ Vite exposes to the browser only the variables with the `VITE_` prefix.
 npm run deploy
 ```
 
-The app is built into `dist` and copied into the `task6` folder of the `gh-pages` branch.
-Vite puts the values from `.env.local` into the bundle at build time, so the file must exist when you deploy.
+The build is copied into the `task7` folder of the `gh-pages` branch. Every build gets a new
+Service Worker version, so users see the "new version" banner after a deploy.
+
+## 1. Manifest & installation
+
+- `public/manifest.json` — `name`, `short_name`, `start_url: "./"`, `scope: "./"`,
+  `display: "standalone"`, `theme_color`, `background_color`.
+- Icons `public/icons/icon-192.png` and `icon-512.png` (+ the 512 icon as `maskable` for Android).
+- `index.html` links the manifest, sets `theme-color` and the iOS `apple-touch-icon`.
+- Installable because: HTTPS (GitHub Pages) + valid manifest + Service Worker with a `fetch` handler.
+
+## 2. Service Worker lifecycle — `public/sw.js`
+
+| Event      | What it does                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------------- |
+| `install`  | pre-caches the app shell: `index.html`, all built JS/CSS, icons, manifest, `offline.html`    |
+| `activate` | deletes caches of old versions (`static-<old version>`), takes control of open tabs          |
+| `fetch`    | chooses a caching strategy for each request (see below)                                      |
+| `message`  | `"SKIP_WAITING"` from the page activates the waiting new version                             |
+
+**How the file list gets into the SW.** JS/CSS files have hashes in their names
+(`index-K83CSKo-.js`), so they are not known in advance. A small plugin in `vite.config.js`
+runs after `vite build`, reads all files in `dist/` and writes them into `dist/sw.js` together
+with a new `BUILD_VERSION` (build time).
+
+**Versioned caches.** The static cache is called `static-<BUILD_VERSION>`. A new build means a new
+name, and `activate` removes every cache that is not in the list of current caches.
+
+**Update mechanism** (`src/services/swService.js`, `src/hooks/useSwUpdate.js`, `UpdateBanner.jsx`):
+
+1. The browser downloads a changed `sw.js` (on every visit + we call `registration.update()` every 30 min).
+2. The new SW installs and **waits** (no `skipWaiting` in `install`), the old one keeps serving the page.
+3. The page notices the waiting worker and shows the banner *"A new version of the app is available"* with an **Update now** button.
+4. The button sends `SKIP_WAITING` → the new SW activates, deletes old caches → `controllerchange` → the page reloads once with the new files.
+
+Users never need to clear storage manually: old caches are removed automatically in `activate`.
+
+## 3. Runtime caching
+
+| Requests                                   | Strategy           | Cache          | Limit        |
+| ------------------------------------------ | ------------------ | -------------- | ------------ |
+| App shell (our JS, CSS, html, icons)       | precache → cache-first | `static-<version>` | replaced every version |
+| Images and fonts (recipe photos, icons)    | **cache-first**    | `images-v1`    | 60 entries   |
+| Public API `https://dummyjson.com/recipes` (list + details) | **network-first** | `api-v1` | 50 entries |
+| Page navigation (`index.html`)             | network-first → cached shell → `offline.html` | — | — |
+| Everything else (Firebase Auth, Google tokens, POST/PUT/DELETE) | **not cached** | — | — |
+
+- **Cache-first**: images do not change, so the saved copy is used at once and the network is used only for new images.
+- **Network-first**: API data should be fresh, so we try the network first; if there is no connection,
+  the last saved answer is returned. That is why recipes opened before are available offline.
+- **Limits**: after every save the oldest entries are deleted when the cache is bigger than the limit.
+- **Private data is never cached by the SW**: only the public recipes API is in the runtime cache.
+  Firebase requests (`identitytoolkit`, `securetoken`) and all non-GET requests pass through untouched.
+  Tasks are stored in `localStorage` by the fake API, not in shared caches.
+- **Failed requests**: if there is no network and no saved copy, the SW passes the error to the page,
+  the page shows an error box or redirects to `/offline` — the app never crashes.
+- **Showing cached data**: when offline, the recipe pages show *"You are offline — this is a saved copy of the data"*
+  and a red banner under the navbar says that saved data is shown.
+- TanStack Query uses `networkMode: "always"`, so requests are sent even offline and the SW can answer them from cache.
+
+## 4. Offline
+
+- `/offline` (`src/pages/Offline.jsx`) — dedicated page with a message, styling and a **Retry Connection** button.
+  The button really checks the network (`checkConnection()` downloads `manifest.json?check=<time>` with `cache: "no-store"`),
+  because `navigator.onLine` can say "online" without internet. On success the user returns to the page they wanted.
+- When a recipe page cannot be loaded (offline and never opened before), the app redirects to `/offline`.
+- `public/offline.html` — static fallback the SW returns if even the app shell cannot be loaded.
+- Online/offline indicator in the navbar (`useOnlineStatus` hook, `online` / `offline` events) + offline banner.
+- When the connection returns, TanStack Query refetches the data automatically (`refetchOnReconnect`).
+- Available offline: all pages of the app (shell is pre-cached), tasks and dashboard (localStorage),
+  recipes and photos that were opened before, the logged in session (Firebase keeps it in the browser).
+
+## 5. Mobile
+
+- Works from **320px**: no horizontal scroll, long words wrap (`overflow-wrap: anywhere`).
+- **Responsive navigation**: below 760px the links move into a hamburger menu (☰ / ✕), the menu closes after a click
+  and scrolls in landscape mode.
+- Cards, filters, task form, dashboard, task and recipe details become one column; stat cards 2 per row.
+- Touch-friendly: buttons, inputs and menu links are at least 44px high, inputs use 16px text (no zoom on iOS).
+- Tested in portrait (320×640, 375×812) and landscape (740×360).
 
 ## Routes
 
-| Route          | Page                                         |
-| -------------- | -------------------------------------------- |
-| `/`            | Home                                         |
-| `/about`       | About (me + the project)                     |
-| `/items`       | Tasks list                                   |
-| `/items/:id`   | Task details                                 |
-| `/dashboard`   | Dashboard with statistics                    |
-| `/login`       | Email/password login + Google sign-in        |
-| `/signup`      | Email, password, confirm password            |
-| `/profile`     | **Protected**: email, UID, logout            |
-| `*`            | Custom 404                                   |
+| Route           | Page                                          |
+| --------------- | --------------------------------------------- |
+| `/`             | Home                                          |
+| `/about`        | About                                         |
+| `/recipes`      | Public recipes list (cached, works offline)   |
+| `/recipes/:id`  | Recipe details (cached, works offline)        |
+| `/offline`      | Offline page with Retry Connection            |
+| `/login`        | Email/password + Google sign-in               |
+| `/signup`       | Sign up with validation                       |
+| `/profile`      | **Protected**: email, UID, logout             |
+| `/items`        | **Protected**: tasks list with filters        |
+| `/items/:id`    | **Protected**: task details                   |
+| `/dashboard`    | **Protected**: statistics                     |
+| `*`             | Custom 404                                    |
 
-A guest who opens `/profile` is redirected to `/login`; after signing in they are sent back to the page they wanted.
-The NavBar shows **Login / Sign up** for guests and **Profile / Logout** for logged in users.
-
-## Authentication
-
-- `src/firebase.js` — initializes Firebase from the env variables, sets `browserLocalPersistence`.
-- `src/services/authService.js` — all Firebase auth calls + readable error messages.
-- `src/context/AuthContext.jsx` — `AuthProvider` and `useAuth()`:
-  - `user` is tracked with `onAuthStateChanged`;
-  - `loading` is `true` until Firebase restores the saved session (so a refresh does not log the user out and protected pages do not "flash" to `/login`);
-  - `pending` / `error` — state of the current login / signup / logout request;
-  - `signup`, `login`, `loginWithGoogle`, `logout`, `clearError`.
-- `src/components/ProtectedRoute.jsx` — wrapper route that redirects guests to `/login`.
-
-## Caching strategy
-
-Server data is cached with **TanStack Query** (`src/services/queryClient.js`, `src/hooks/useTasks.js`).
-
-**Query keys** — every request has its own cache entry:
-
-| Key                                      | Data                                     |
-| ---------------------------------------- | ---------------------------------------- |
-| `["tasks", "list", filters]`             | one page of `/items` for these filters   |
-| `["tasks", "stats", { category }]`       | all tasks for the dashboard              |
-| `["tasks", "detail", id]`                | one task                                 |
-
-Because the filters (search, category, priority, status, sort, page) are part of the key,
-going back to a page or filter that was already opened shows the data at once, without a loader.
-
-**Expiration / revalidation**
-
-- `staleTime: 30s` — during 30 seconds cached data is fresh and no request is sent.
-- After that the data is *stale*: it is still shown immediately, but a background request revalidates it
-  (when the page is opened again or the browser tab gets focus). The list shows "· updating..." meanwhile.
-- `gcTime: 5 min` — a cache entry nobody uses for 5 minutes is removed from memory.
-- `retry` — one retry for random server errors, no retry for 404.
-
-**When the cache is invalidated**
-
-| Operation                         | What happens to the cache                                                                   |
-| --------------------------------- | ------------------------------------------------------------------------------------------- |
-| Create task                       | new task is put into `detail`, all `list` and `stats` entries are invalidated               |
-| Update task (edit / mark as done) | `detail` is replaced with the API answer, all `list` and `stats` entries are invalidated    |
-| Delete task                       | `detail` entry is removed, all `list` and `stats` entries are invalidated                   |
-
-Invalidated entries that are on the screen are refetched right away, the others — the next time they are opened.
-
-**Outdated requests** — TanStack Query passes an `AbortSignal` to every request (our fake API supports it).
-When the filters change, the request for the old key is cancelled, and its result can be written only into
-the old key, so it never overwrites the newer result on the screen.
-
-**Loading / error / empty states** — loader on the first load, error box with "Try again" (only when there is no
-cached data to show), "No tasks match your filters" / "There are no tasks in this category" for empty results.
-
-## Project structure
+## New files in task 7
 
 ```
+public/
+├── manifest.json        PWA manifest
+├── icons/               192 and 512 icons
+├── sw.js                Service Worker (install / activate / fetch / message)
+└── offline.html         fallback page of the Service Worker
 src/
-├── api/                    fake backend (not imported by components)
-│   ├── fakeApi.js          delay, random errors, filters, sort, pagination, abort
-│   ├── initial-data-sample.js  24 seed tasks, 10 fields each
-│   └── settings.js
 ├── services/
-│   ├── service.js          ALL task requests of the app live here
-│   ├── authService.js      ALL Firebase auth calls
-│   └── queryClient.js      TanStack Query cache settings
-├── context/
-│   └── AuthContext.jsx     AuthProvider + useAuth
+│   ├── swService.js         register SW, detect and apply updates
+│   ├── recipesService.js    public API (fetch)
+│   └── networkService.js    real connection check
 ├── hooks/
-│   ├── useTasks.js             query keys, cached queries and mutations with invalidation
-│   ├── useTaskFilters.js       filters <-> URL (useSearchParams)
-│   ├── useDebouncedValue.js    delay before sending the search request
-│   └── usePageTitle.js         changes the browser tab title
+│   ├── useOnlineStatus.js   online / offline
+│   ├── useSwUpdate.js       "new version available"
+│   └── useRecipes.js        TanStack Query hooks for recipes
 ├── components/
-│   ├── RootLayout.jsx      NavBar + <Outlet /> + <Suspense>
-│   ├── NavBar.jsx          links depend on the auth state
-│   ├── ProtectedRoute.jsx  redirect guests to /login
-│   ├── Card.jsx / Filters.jsx / Pagination.jsx / TaskForm.jsx
-│   ├── StatCard.jsx / Breakdown.jsx
-│   └── Loader.jsx / ErrorBox.jsx / EmptyBox.jsx
-├── pages/                  one file per route
-├── styles/                 index.css (tokens) + App.css (components)
-├── utils/format.js         date helpers
-├── firebase.js             Firebase initialization
-├── App.jsx                 ONLY the routes
-└── main.jsx                QueryClientProvider + AuthProvider + Router
+│   ├── UpdateBanner.jsx     banner with the Update button
+│   └── CachedNotice.jsx     "this is a saved copy" message
+└── pages/
+    ├── Recipes.jsx / RecipeDetails.jsx
+    └── Offline.jsx
+vite.config.js               plugin that writes the file list + version into dist/sw.js
 ```
 
-## Features
+## Preserved from previous homeworks
 
-- Firebase auth: signup, login, Google sign-in, logout, persistent session, readable errors
-- Protected `/profile` route and auth-aware NavBar
-- Cached server data with query keys, revalidation and invalidation after create / update / delete
-- Everything from task 5 is preserved: nested routes, search, 3 filters, 6 sorting options and pagination in the URL,
-  task details, dashboard with statistics, lazy loading, custom 404, light and dark theme
+- Firebase Auth (email/password, Google), persistent session, protected routes, auth-aware navbar (task 6)
+- TanStack Query cache with query keys, invalidation after create / update / delete (task 6)
+- Search, 3 filters, 6 sorting options, pagination in the URL, task CRUD, dashboard, lazy pages, 404 (tasks 4–5)
