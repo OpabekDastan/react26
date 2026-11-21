@@ -1,6 +1,6 @@
 // Service Worker of the Task Manager
 // BUILD_VERSION and PRECACHE_FILES are filled in by vite.config.js after "npm run build"
-const BUILD_VERSION = "1795076202557";
+const BUILD_VERSION = "1795260061581";
 const PRECACHE_FILES = [
   "./",
   "./favicon.svg",
