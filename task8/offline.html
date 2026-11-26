@@ -1,0 +1,82 @@
+<!doctype html>
+<!-- Fallback page: the Service Worker shows it if a page cannot be loaded at all offline -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4f46e5" />
+    <title>Offline — Task Manager</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f6f7fb;
+        --panel: #ffffff;
+        --text: #475069;
+        --text-h: #141a2e;
+        --accent: #4f46e5;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #11131a;
+          --panel: #181b24;
+          --text: #a8b0c4;
+          --text-h: #f1f3f9;
+          --accent: #8b87ff;
+        }
+      }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.55 system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      }
+
+      .box {
+        max-width: 420px;
+        width: 100%;
+        padding: 28px 22px;
+        border-radius: 12px;
+        background: var(--panel);
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .icon {
+        font-size: 48px;
+      }
+
+      h1 {
+        margin: 8px 0;
+        color: var(--text-h);
+        font-size: 26px;
+      }
+
+      button {
+        min-height: 44px;
+        margin-top: 12px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 9px;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="box">
+      <div class="icon" aria-hidden="true">📡</div>
+      <h1>You are offline</h1>
+      <p>This page cannot be loaded without the internet. Check Wi-Fi or mobile data.</p>
+      <button onclick="location.reload()">Retry Connection</button>
+    </main>
+  </body>
+</html>
