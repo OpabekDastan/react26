@@ -10,7 +10,7 @@ function RecipeDetails() {
   const { id } = useParams();
   const location = useLocation();
 
-  const { data: recipe, isPending, error, refetch } = useRecipe(id);
+  const { recipe, loading, error, reload } = useRecipe(id);
 
   usePageTitle(recipe ? recipe.name : "Recipe " + id);
 
@@ -19,7 +19,7 @@ function RecipeDetails() {
     return <Navigate to="/offline" replace state={{ from: location.pathname }} />;
   }
 
-  if (isPending) {
+  if (loading) {
     return (
       <section className="page details">
         <Loader text={"Loading recipe #" + id + "..."} />
@@ -42,7 +42,7 @@ function RecipeDetails() {
   if (error && !recipe) {
     return (
       <section className="page details">
-        <ErrorBox message={error.message} onRetry={() => refetch()} />
+        <ErrorBox message={error.message} onRetry={reload} />
       </section>
     );
   }

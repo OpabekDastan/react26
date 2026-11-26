@@ -14,7 +14,7 @@ function Recipes() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
 
-  const { data, isPending, error, refetch } = useRecipes(page);
+  const { data, loading, error, reload } = useRecipes(page);
 
   function handlePageChange(nextPage) {
     setSearchParams(nextPage === 1 ? {} : { page: nextPage });
@@ -44,9 +44,9 @@ function Recipes() {
 
       <CachedNotice />
 
-      {isPending && <Loader text="Loading recipes..." />}
+      {loading && <Loader text="Loading recipes..." />}
 
-      {error && !data && <ErrorBox message={error.message} onRetry={() => refetch()} />}
+      {error && !data && <ErrorBox message={error.message} onRetry={reload} />}
 
       {data && data.recipes.length === 0 && <EmptyBox text="No recipes on this page" />}
 

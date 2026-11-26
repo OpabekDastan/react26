@@ -3,10 +3,14 @@
 const BUILD_VERSION = "__BUILD_VERSION__";
 const PRECACHE_FILES = "__PRECACHE_FILES__";
 
+// task5..task8 live on the same origin (github.io) and share Cache Storage,
+// so every cache name starts with the name of this app
+const PREFIX = "task8-";
+
 // versioned caches: every build has its own static cache
-const STATIC_CACHE = "static-" + BUILD_VERSION;
-const IMAGE_CACHE = "images-v1";
-const API_CACHE = "api-v1";
+const STATIC_CACHE = PREFIX + "static-" + BUILD_VERSION;
+const IMAGE_CACHE = PREFIX + "images-v1";
+const API_CACHE = PREFIX + "api-v1";
 const KNOWN_CACHES = [STATIC_CACHE, IMAGE_CACHE, API_CACHE];
 
 // limits, so runtime caches do not grow forever
@@ -32,7 +36,8 @@ self.addEventListener("activate", (event) => {
       .then((names) =>
         Promise.all(
           names
-            .filter((name) => !KNOWN_CACHES.includes(name))
+            // only OUR old caches: caches of the other homeworks are not touched
+            .filter((name) => name.startsWith(PREFIX) && !KNOWN_CACHES.includes(name))
             .map((name) => caches.delete(name)),
         ),
       )

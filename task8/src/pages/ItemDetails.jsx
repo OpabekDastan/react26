@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router";
-import { useTask, useUpdateTask, useDeleteTask } from "../hooks/useTasks.js";
+import { useTask, useTaskActions } from "../hooks/useTasks.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import { formatDate, daysLeft, isOverdue } from "../utils/format.js";
 import TaskForm from "../components/TaskForm.jsx";
@@ -14,26 +14,17 @@ function ItemDetails() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // a task opened before is shown from the cache at once
-  const {
-    data: task,
-    isPending: loading,
-    error,
-    refetch: reload,
-  } = useTask(id);
+  // a task opened before (or seen in a list) is shown from the store at once
+  const { task, loading, error, reload } = useTask(id);
 
-  // mutations update the cache of this task and invalidate the lists
-  const updateMutation = useUpdateTask();
-  const deleteMutation = useDeleteTask();
+  // the thunks update this task in the store and mark the lists as stale
+  const { update, remove, busy, updating: saving } = useTaskActions();
 
   // 404 = the id is fine but there is no such task; anything else = server problem
   const notFound = error?.status === 404;
 
   const [editing, setEditing] = useState(false);
   const [actionError, setActionError] = useState("");
-
-  const saving = updateMutation.isPending;
-  const busy = updateMutation.isPending || deleteMutation.isPending;
 
   usePageTitle(task ? task.name : "Task " + id);
 
@@ -44,10 +35,7 @@ function ItemDetails() {
     setActionError("");
 
     try {
-      await updateMutation.mutateAsync({
-        id: task.id,
-        changes: { completed: !task.completed },
-      });
+      await update(task.id, { completed: !task.completed });
     } catch (err) {
       setActionError(err.message);
     }
@@ -57,7 +45,7 @@ function ItemDetails() {
     setActionError("");
 
     try {
-      await updateMutation.mutateAsync({ id: task.id, changes: formData });
+      await update(task.id, formData);
       setEditing(false);
     } catch (err) {
       setActionError(err.message);
@@ -72,7 +60,7 @@ function ItemDetails() {
     setActionError("");
 
     try {
-      await deleteMutation.mutateAsync(task.id);
+      await remove(task.id);
       navigate("/items"); // after deleting there is nothing to show here
     } catch (err) {
       setActionError(err.message);

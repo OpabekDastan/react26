@@ -1,85 +1,105 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  getTasks,
-  getAllTasks,
-  getTaskById,
+  listKey,
+  fetchTasks,
+  fetchTaskById,
   createTask,
   updateTask,
   deleteTask,
-} from "../services/service.js";
+} from "../features/tasks/tasksThunks.js";
+import {
+  selectListEntry,
+  selectTasksListResult,
+  selectTaskById,
+  selectTaskDetailsEntry,
+  selectTaskMutation,
+} from "../features/tasks/tasksSelectors.js";
 
-// query keys: every filter is a part of the key, so every combination has its own cache entry
-export const taskKeys = {
-  all: ["tasks"],
-  lists: () => ["tasks", "list"],
-  list: (filters) => ["tasks", "list", filters],
-  stats: () => ["tasks", "stats"],
-  statsFor: (category) => ["tasks", "stats", { category }],
-  detail: (id) => ["tasks", "detail", String(id)],
-};
-
-// TanStack Query gives a signal: an outdated request is aborted, its result never reaches the page
-
+// ---------- list of tasks for the current filters ----------
 export function useTasksList(filters) {
-  return useQuery({
-    queryKey: taskKeys.list(filters),
-    queryFn: ({ signal }) => getTasks(filters, signal),
-  });
+  const dispatch = useDispatch();
+  const key = listKey(filters);
+
+  const entry = useSelector((state) => selectListEntry(state, key));
+  const result = useSelector((state) => selectTasksListResult(state, key));
+  const stale = Boolean(entry?.stale);
+
+  useEffect(() => {
+    // condition in the thunk skips the request when the list is still fresh
+    const request = dispatch(fetchTasks({ filters }));
+
+    // filters changed / page closed -> the old request is cancelled (stale request)
+    return () => request.abort();
+    // key describes the filters completely; stale = a mutation changed the data -> load again
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, key, stale]);
+
+  const reload = useCallback(
+    () => dispatch(fetchTasks({ filters, force: true })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch, key],
+  );
+
+  const failed = entry?.status === "failed";
+
+  return {
+    data: result, // null until the first answer
+    loading: !result && !failed, // first load: nothing to show yet
+    fetching: entry?.status === "loading", // also true while old data is shown
+    error: failed ? entry.error : null,
+    reload,
+  };
 }
 
-export function useAllTasks(category) {
-  return useQuery({
-    queryKey: taskKeys.statsFor(category),
-    queryFn: ({ signal }) => getAllTasks({ category }, signal),
-  });
-}
-
+// ---------- one task ----------
 export function useTask(id) {
-  return useQuery({
-    queryKey: taskKeys.detail(id),
-    queryFn: ({ signal }) => getTaskById(id, signal),
-  });
+  const dispatch = useDispatch();
+
+  // a task that is already in a list is shown at once, the details are checked in the background
+  const task = useSelector((state) => selectTaskById(state, id));
+  const entry = useSelector((state) => selectTaskDetailsEntry(state, id));
+
+  useEffect(() => {
+    const request = dispatch(fetchTaskById({ id }));
+    return () => request.abort();
+  }, [dispatch, id]);
+
+  const reload = useCallback(() => dispatch(fetchTaskById({ id, force: true })), [dispatch, id]);
+
+  const failed = entry?.status === "failed";
+
+  return {
+    task,
+    loading: !task && !failed,
+    error: failed ? entry.error : null,
+    reload,
+  };
 }
 
-// lists and dashboard statistics depend on every task, so they become outdated after any change
-function invalidateLists(queryClient) {
-  queryClient.invalidateQueries({ queryKey: taskKeys.lists() });
-  queryClient.invalidateQueries({ queryKey: taskKeys.stats() });
-}
+// ---------- create / update / delete ----------
+export function useTaskActions() {
+  const dispatch = useDispatch();
+  const mutation = useSelector(selectTaskMutation);
 
-export function useCreateTask() {
-  const queryClient = useQueryClient();
+  // unwrap(): the page gets the result or a thrown error and can show it in its own UI
+  const create = useCallback((formData) => dispatch(createTask(formData)).unwrap(), [dispatch]);
 
-  return useMutation({
-    mutationFn: (formData) => createTask(formData),
-    onSuccess: (created) => {
-      queryClient.setQueryData(taskKeys.detail(created.id), created);
-      invalidateLists(queryClient);
-    },
-  });
-}
+  const update = useCallback(
+    (id, changes) => dispatch(updateTask({ id, changes })).unwrap(),
+    [dispatch],
+  );
 
-export function useUpdateTask() {
-  const queryClient = useQueryClient();
+  const remove = useCallback((id) => dispatch(deleteTask(id)).unwrap(), [dispatch]);
 
-  return useMutation({
-    mutationFn: ({ id, changes }) => updateTask(id, changes),
-    onSuccess: (updated) => {
-      // API returns the new task -> we put it into the cache without one more request
-      queryClient.setQueryData(taskKeys.detail(updated.id), updated);
-      invalidateLists(queryClient);
-    },
-  });
-}
+  const busy = mutation.status === "loading";
 
-export function useDeleteTask() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id) => deleteTask(id),
-    onSuccess: (_result, id) => {
-      queryClient.removeQueries({ queryKey: taskKeys.detail(id) });
-      invalidateLists(queryClient);
-    },
-  });
+  return {
+    create,
+    update,
+    remove,
+    busy,
+    creating: busy && mutation.operation === "create",
+    updating: busy && mutation.operation === "update",
+  };
 }

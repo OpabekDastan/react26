@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { CATEGORIES } from "../services/service.js";
 import { useTaskFilters } from "../hooks/useTaskFilters.js";
-import { useAllTasks } from "../hooks/useTasks.js";
+import { useDashboardStats } from "../hooks/useDashboardStats.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import { formatDate, isOverdue } from "../utils/format.js";
 import StatCard from "../components/StatCard.jsx";
@@ -10,28 +10,14 @@ import Loader from "../components/Loader.jsx";
 import ErrorBox from "../components/ErrorBox.jsx";
 import EmptyBox from "../components/EmptyBox.jsx";
 
-// counts how many times every value of `field` appears: { Study: 4, Work: 2 }
-function countBy(tasks, field) {
-  const result = {};
-
-  tasks.forEach((task) => {
-    const key = task[field];
-    result[key] = (result[key] || 0) + 1;
-  });
-
-  return result;
-}
-
 function Dashboard() {
   usePageTitle("Dashboard");
 
   const { filters, setFilter } = useTaskFilters();
   const category = filters.category;
 
-  // cached by category: switching back to a category shows the saved statistics at once
-  const { data, isPending: loading, error, refetch: reload } = useAllTasks(category);
-
-  const tasks = data ? data.data : [];
+  // every number comes from a memoized selector: switching back to a category is instant
+  const { stats, loading, error, reload } = useDashboardStats(category);
 
   function handleCategoryChange(value) {
     setFilter("category", value);
@@ -45,8 +31,8 @@ function Dashboard() {
     );
   }
 
-  // a failed background refetch keeps the old statistics on the screen
-  if (error && !data) {
+  // a failed background refresh keeps the old statistics on the screen
+  if (error) {
     return (
       <section className="page dashboard">
         <ErrorBox message={error.message} onRetry={reload} />
@@ -54,45 +40,19 @@ function Dashboard() {
     );
   }
 
-  // ---------- statistics (calculated from the API data) ----------
-  const total = tasks.length;
-  const done = tasks.filter((task) => task.completed).length;
-  const active = total - done;
-  const overdue = tasks.filter(isOverdue).length;
-  const completionRate = total === 0 ? 0 : Math.round((done / total) * 100);
-  const totalHours = tasks.reduce((sum, task) => sum + task.estimatedHours, 0);
-  const averageHours = total === 0 ? 0 : (totalHours / total).toFixed(1);
-
-  // ---------- breakdowns ----------
-  const byCategory = countBy(tasks, "category");
-  const byPriority = countBy(tasks, "priority");
-  const byAssignee = countBy(tasks, "assignee");
-
-  const categoryRows = Object.keys(byCategory)
-    .sort()
-    .map((key) => ({
-      label: key,
-      value: byCategory[key],
-      to: "/items?category=" + key,
-    }));
-
-  const priorityRows = ["High", "Medium", "Low"]
-    .filter((key) => byPriority[key])
-    .map((key) => ({
-      label: key,
-      value: byPriority[key],
-      to: "/items?priority=" + key,
-    }));
-
-  const assigneeRows = Object.keys(byAssignee)
-    .sort((a, b) => byAssignee[b] - byAssignee[a])
-    .map((key) => ({ label: key, value: byAssignee[key] }));
-
-  // five nearest deadlines among the active tasks -> links to the details page
-  const upcoming = tasks
-    .filter((task) => !task.completed)
-    .sort((a, b) => a.deadline.localeCompare(b.deadline))
-    .slice(0, 5);
+  const {
+    total,
+    done,
+    active,
+    overdue,
+    completionRate,
+    totalHours,
+    averageHours,
+    categoryRows,
+    priorityRows,
+    assigneeRows,
+    upcoming,
+  } = stats;
 
   return (
     <section className="page dashboard">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PAGE_SIZE } from "../services/service.js";
 import { useTaskFilters } from "../hooks/useTaskFilters.js";
-import { useTasksList, useCreateTask } from "../hooks/useTasks.js";
+import { useTasksList, useTaskActions } from "../hooks/useTasks.js";
 import { useDebouncedValue } from "../hooks/useDebouncedValue.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 import Card from "../components/Card.jsx";
@@ -30,16 +30,10 @@ function ItemsList() {
 
   const { filters, setFilter, resetFilters, hasFilters } = useTaskFilters();
 
-  // every filters combination is a separate cache entry (see taskKeys.list)
-  const {
-    data,
-    isPending: loading,
-    isFetching,
-    error,
-    refetch: reload,
-  } = useTasksList(filters);
+  // every filters combination is a separate list in the Redux store (see listKey)
+  const { data, loading, fetching, error, reload } = useTasksList(filters);
 
-  const createMutation = useCreateTask();
+  const { create, creating } = useTaskActions();
 
   const result = data || EMPTY_RESULT;
   // error box only when there is nothing cached to show
@@ -82,8 +76,8 @@ function ItemsList() {
     setFormError("");
 
     try {
-      // the mutation invalidates the cached lists, so the new task appears without reload()
-      const created = await createMutation.mutateAsync(formData);
+      // the thunk marks the lists as stale, so the new task appears without reload()
+      const created = await create(formData);
 
       setFormOpen(false);
       setMessage('Task "' + created.name + '" was created');
@@ -120,7 +114,7 @@ function ItemsList() {
         <TaskForm
           mode="create"
           initialTask={emptyTask}
-          saving={createMutation.isPending}
+          saving={creating}
           error={formError}
           onSave={handleCreate}
           onCancel={() => setFormOpen(false)}
@@ -160,7 +154,7 @@ function ItemsList() {
         <>
           <p className="muted result-count">
             Showing {firstOnPage}–{lastOnPage} of {result.total} tasks
-            {isFetching && " · updating..."}
+            {fetching && " · updating..."}
           </p>
 
           <div className="card-grid">
